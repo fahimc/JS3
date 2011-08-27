@@ -144,10 +144,8 @@ t.init = function(obj, prop, func, begin, finish, duration, eventOnComplete){
 		var end = (duration ) * stage.frameRate; 
 		var timer =new Timer(stage.frameRate,end);
 		var curentTime=0;
-		
 		timer.addEventListener(TimerEvent.TIMER_COMPLETE,onTimerComplete);
 		timer.addEventListener(TimerEvent.TIMER,onTimer);
-		
 		timer.start();
 		
 		 function onTimer()

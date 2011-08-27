@@ -8,7 +8,6 @@ function onLoad()
 	if(FlashVars.getValue("songId"))youtubePlayer.songId = FlashVars.getValue("songId");
 	
 	
-	
 	header = new UIElement();
 	header.name="header";
 	header.styleName="header";
@@ -99,22 +98,21 @@ function onLoad()
 	urlLoader.addEventListener(Event.ON_COMPLETE,onXMLLoad);
  	urlLoader.load("playlist.xml");
 	
-	logo.buttonMode(true);
-	logo.addEventListener(MouseEvent.MOUSE_DOWN,onDown);
-	logo.addEventListener(MouseEvent.MOUSE_UP,onUp);
+	sprite = new Sprite();
+	sprite.lineStyle(3,"0x00ff00");
+	sprite.beginFill("0x0000FF",0);
+	sprite.drawRect(10,10,100,100);
+	sprite.endFill();
+	
+	addChild(sprite);
 	
 	
+	t1 = new  Tween(sprite,'alpha',Tween.elasticEaseOut,1,0,4,doneit);
+	t1.start();
 }
-function onDown()
+function doneit()
 {
-	logo.startDrag(100,50);
-	//trace("down");
-	
-}
-function onUp()
-{
-	
-	logo.stopDrag();
+	logo.alpha(1);
 }
 function onXMLLoad()
 {

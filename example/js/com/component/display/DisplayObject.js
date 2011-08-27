@@ -86,7 +86,6 @@ function DisplayObject() {}
 				
 				if(b.isIE())
 				{
-				
 					elem.attachEvent('on'+eventName.name,functionName);
 				}else{
 					
