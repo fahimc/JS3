@@ -1,0 +1,51 @@
+/* CSS Document */
+html,body{margin:0px; padding:0px;}
+body{left:10px; font-family:Arial, Helvetica, sans-serif; color:#FFF;}
+.header
+{
+	color:#F00;
+	border:#00F 0px solid;
+	background-color:#202c3a;
+}
+.middle
+{
+	color:#F00;
+	border:#00F 0px solid;
+	background-color:#4a6686;
+}
+.footer
+{
+	color:#F00;
+	border:#00F 0px solid;
+	background-color:#202c3a;
+}
+.logo
+{
+	background:url(../images/logo.gif);
+}
+.search
+{
+	color:#7d8893;
+	background:url(../images/searchBG.gif) no-repeat;
+	border:0px solid;
+	padding-left:10px;
+}
+.playlist
+{
+	background-color:#273647;
+	border:#00F 0px solid;
+}
+.youtubePlayer{
+	background-color:#000;
+	border:0px solid;
+	}
+.YoutubePlayerComponent{border:0px solid #f00; overflow:hidden}
+
+
+.textfield{color:#000;
+	border:#000 1px solid;
+	background-color:#ccc;}
+.container{background-color:#ccc;}
+.playlistItem{background-color:#4a6686; height:20px;overflow:hidden;border:#00F 0px solid; }
+.playlistItem p{margin:0px; padding:0px; border:#00F 0px solid;}
+.movieclip{ width:200px; height:400px;}
