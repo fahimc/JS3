@@ -4,6 +4,7 @@ function Stage()
 		extend(Stage,DisplayObject);
 		var public = Stage.prototype;
 		public.frameRate=31;
+		this.element = document.body;
 		public.stageWidth = function()
 		 {
 			

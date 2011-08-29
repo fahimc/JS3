@@ -11,6 +11,7 @@ function UIElement(){}
 	// public properties:
 	public.name;
 	public.styleName;
+	this.label=null;
 	// private properties:
 	
 	// public methods:
@@ -45,10 +46,15 @@ function UIElement(){}
 			}
 			public.text =function(value)
 			{
-				var oNewP = document.createElement("p");
+				if(!this.label)
+				{
+				this.label = document.createElement("p");
      		    var oText = document.createTextNode(value);
-                oNewP.appendChild(oText);
-                this.element.appendChild(oNewP);
+                this.label.appendChild(oText);
+                this.element.appendChild(this.label);
+				}else{
+				 this.label.innerHTML=value;
+				}
 			}
 			
 window.UIElement = UIElement;

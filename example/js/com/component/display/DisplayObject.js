@@ -144,7 +144,9 @@ function DisplayObject() {}
 			}
 			public.getX = function()
 			{
+				
 				var xx = (this.element.style.left).split("px");
+				if(!xx[0])return 0;
 				return  xx[0];
 			}
 			public.getY = function()
@@ -158,7 +160,10 @@ function DisplayObject() {}
 				this.element.style['opacity'] = value /100 ;
 				
 				this.element.style['-moz-opacity'] = value / 100;
-				if(this.element.filters && this.element.filters.alpha) this.element.filters.alpha['opacity'] =  _pos;
+				
+				
+				
+				if(this.element.style.filters ) this.element.filters.alpha['opacity'] =  _pos;
 			}
 			public.visible = function(value)
 			{
