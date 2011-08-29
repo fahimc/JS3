@@ -3,10 +3,12 @@
 (function(window) {
 		 
 function DisplayObject() {}
-		
+
+	extend(DisplayObject, EventDispatcher);
+	//DisplayObject.prototype = new EventDispatcher();
 
 	// constructor:
-  	var public = DisplayObject.prototype;
+  	var public =DisplayObject.prototype;
   	
 	
 	// public properties:
@@ -20,6 +22,7 @@ function DisplayObject() {}
 	// public methods:
 	public.addChild = function(child) 
 			{
+				
 				this.childrenContainer.push(child);
 				if(child.element)
 				{
@@ -74,10 +77,10 @@ function DisplayObject() {}
 		
 				return this.element.style.height.split("px").join("") ;
 			}
-			public.addEventListener = function(eventName,functionName)
+			/*public.addEventListener = function(eventName,functionName)
 			{
 				
-				
+
 				var b = new Browser();
 				var elem = this.element;
 				if(eventName.target!="parent")elem=eventName.target;
@@ -86,7 +89,10 @@ function DisplayObject() {}
 				
 				if(b.isIE())
 				{
-					elem.attachEvent('on'+eventName.name,functionName);
+					var ename = eventName.name;
+					if(eventName.on)ename='on'+eventName.name;
+					
+					elem.attachEvent(ename,functionName);
 				}else{
 					
 					elem.addEventListener(eventName.name,functionName,false);
@@ -110,7 +116,7 @@ function DisplayObject() {}
 				}
 				b=null;
 				
-			}
+			}*/
 			public.buttonMode = function(boolean)
 			{
 				if(boolean)
@@ -152,8 +158,7 @@ function DisplayObject() {}
 				this.element.style['opacity'] = value /100 ;
 				
 				this.element.style['-moz-opacity'] = value / 100;
-					
-				if(this.element.filters) obj.filters.alpha['opacity'] =  value;
+				if(this.element.filters && this.element.filters.alpha) this.element.filters.alpha['opacity'] =  _pos;
 			}
 			public.visible = function(value)
 			{

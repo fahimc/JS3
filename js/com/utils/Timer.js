@@ -1,48 +1,71 @@
 // timer class
 (function(window) {
- extend(Timer,DisplayObject);
- function Timer(time,delay )
+
+  extend(Timer,DisplayObject);
+ function Timer(t,d )
  {
-	var public = Timer.prototype;
-	 public.time = time;
-	 public.delay = delay;
-	 public.currentCount=0;
-	 if(!public.delay)public.delay = 0;
-     public.timer;
-	  
+	  this.initialize(t,d);
+ }
+	 
+   
+	
+	 var public = Timer.prototype;
+	
+	 public.time=0;
+	 public.delay=0;
+     public.timer=null;
+	 public.currentCount=0; 
+	 
+	 public.initialize=function(t,d)
+	 {
+		 
+		  this.currentCount=0;
+		 this.time = t;
+		 this.delay = d;
+		 if(!this.delay)
+		 {
+		  this.delay = 0;
+		 }
+		
+	 }
 	 
 	 public.start =function()
 	 {
-		 
-		
-			 //trace(this.currentCount ,this.delay);
-		 	public.timer = setInterval(this.timerEvent,this.time);
-			
-		 
+		    var obj = this;
+		 	this.timer = setInterval(timerEvent,this.time);
+			function timerEvent()
+	 		{
+				
+				 if(parseInt(obj.delay)!=0 &&  parseInt(obj.currentCount) >=parseInt(obj.delay)-1)
+				 {
+					
+					obj.stop();
+					
+					obj.dispatch(TimerEvent.TIMER_COMPLETE.name);
+					
+				 }else{
+					
+				 }
+				//trace(public.dispatch);
+				
+				  obj.currentCount=obj.currentCount+1;
+				 obj.dispatch(TimerEvent.TIMER.name);
+				 
+				// dispatchEvent(TimerEvent.TIMER,TimerEvent.TIMER);
+			}
 	 }
-	 public.timerEvent = function()
-	 {
-		 
-		 if(parseInt(public.delay)!=0 &&  parseInt(public.currentCount) >=parseInt(public.delay)-1)
-		 {
-			
-			 public.stop();
-			 dispatchEvent(TimerEvent.TIMER_COMPLETE,TimerEvent.TIMER_COMPLETE);
-		 }else{
-		 	
-		 }
-		  public.currentCount=public.currentCount+1;
-		 dispatchEvent(TimerEvent.TIMER,TimerEvent.TIMER);
-	 }
+	 
+	 
+	 
 	 public.stop = function()
 	 {
-		 var t  = public.timer;
+		 var t  = this.timer;
 		 clearInterval(t);
-	 	 public.currentCount=0;
+	 	 this.currentCount=0;
 		 t=null;
 	 }
 	 
- }		  
+ 		  
 // standard events
 window.TimerEvent =
 {

@@ -11,8 +11,9 @@ function onLoad()
 	sprite.beginFill("0x0000FF",0);
 	sprite.drawRect(10,10,100,100);
 	sprite.endFill();
-	
+sprite.addEventListener(MouseEvent.CLICK,SomeClass);
 	addChild(sprite);
+	
 	
 	
 	t1 = new  Tween(sprite,'alpha',Tween.elasticEaseOut,1,0,4,onTweenComplete);
@@ -20,7 +21,14 @@ function onLoad()
 }
 function onTweenComplete()
 {
+	
 	sprite.alpha(1);
 	t1 = new  Tween(sprite,'x',Tween.elasticEaseOut,0,100,4,onTweenComplete);
 	t1.start();
+}
+///
+
+/** Below is some test-code to verify the most basic functionality **/
+function SomeClass(){
+	trace("click");
 }

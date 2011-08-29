@@ -47,7 +47,7 @@ function trace ()
    subClass.superClass = baseClass.prototype;
  
 }
-function extendSubClasses()
+/*function extendSubClasses()
 {
 	for(var a=0; a< extendables.subClass.length;a++)
 	{		
@@ -56,7 +56,7 @@ function extendSubClasses()
 		subc=null;
 	}
 	 extendables=null;
-}
+}*/
 ///browser detection
 function Browser()
 {
@@ -109,7 +109,7 @@ function frameworkInit()
 {
 	
 	
-	extendSubClasses();
+	//extendSubClasses();
 	
 	
 	

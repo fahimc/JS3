@@ -103,11 +103,12 @@ function onLoad()
 	logo.addEventListener(MouseEvent.MOUSE_DOWN,onDown);
 	logo.addEventListener(MouseEvent.MOUSE_UP,onUp);
 	
-	
+	var t1 = new  Tween(logo,'alpha',Tween.elasticEaseOut,1,0,1);
+	t1.start();
 }
 function onDown()
 {
-	logo.startDrag(100,50);
+	logo.startDrag();
 	//trace("down");
 	
 }

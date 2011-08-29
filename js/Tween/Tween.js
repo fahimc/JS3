@@ -51,6 +51,8 @@ Delegate.create = function (o, f) {
 function Tween (obj, prop, func, begin, finish, duration, suffixe){
 	this.init(obj, prop, func, begin, finish, duration, suffixe)
 }
+
+
 var t = Tween.prototype;
 
 t.obj = new Object();
@@ -144,24 +146,30 @@ t.init = function(obj, prop, func, begin, finish, duration, eventOnComplete){
 		var end = (duration ) * stage.frameRate; 
 		var timer =new Timer(stage.frameRate,end);
 		var curentTime=0;
+		timer.addEventListener(TimerEvent.TIMER.name,onTimerEvent);
+		timer.addEventListener(TimerEvent.TIMER_COMPLETE.name,onTimerComplete);
 		
-		timer.addEventListener(TimerEvent.TIMER_COMPLETE,onTimerComplete);
-		timer.addEventListener(TimerEvent.TIMER,onTimer);
+		
 		
 		timer.start();
 		
-		 function onTimer()
+		 function onTimerEvent()
 		{
+			
 			_pos =_pos - substract;
 			if(_pos < 0)_pos=0;
+			
 			obj.style['opacity'] = _pos / 100;
+			
 			obj.style['-moz-opacity'] = _pos / 100;
-			if(obj.filters) obj.filters.alpha['opacity'] =  _pos;
+			
+			if(obj.filters && obj.filters.alpha) obj.filters.alpha['opacity'] =  _pos;
+			
 		}
 		function onTimerComplete()
 		{
-			timer.removeEventListener(TimerEvent.TIMER_COMPLETE,onTimerComplete);
-			timer.removeEventListener(TimerEvent.TIMER,onTimer);
+			timer.removeEventListener(TimerEvent.TIMER_COMPLETE.name,onTimerComplete);
+			timer.removeEventListener(TimerEvent.TIMER.name,onTimerEvent);
 			timer.stop();
 			timer=null;
 			

@@ -46,11 +46,13 @@ window.dispatchEvent=function(eventName,bubbles,cancelable,target)
 	var fireOnThis =document.body;
 	if(target)fireOnThis=target;
 	if( document.createEvent ) {
-		
+	
 		var evObj = document.createEvent("Events");	
-		evObj.initEvent( 'on'+eventName.name, bubbles, cancelable )
+		evObj.initEvent( eventName.name, bubbles, cancelable )
 		fireOnThis.dispatchEvent(evObj);
+		
 	} else if( document.createEventObject ) {
-  		fireOnThis.fireEvent(eventName.name);
+		var evt = document.createEventObject( );
+  		fireOnThis.fireEvent(eventName.name,evt);
 	}
 }
