@@ -144,14 +144,17 @@ function onTimerEvent()
 {
 	
 }
+
 function init()
 {
 	splash.visible(false);
 	sprite.visible(false);
+	removeChild(splash);
+	removeChild(sprite);
 	target.hideMouse();
 	target.startDrag(null,null,(target.getWidth() * 0.5),(target.getHeight() * 0.5));
-target.addEventListener(MouseEvent.CLICK,onClick);
-onMonkeyUp();
+    target.addEventListener(MouseEvent.CLICK,onClick);
+     onMonkeyUp();
 	
 }
 function onMonkeyUp()
@@ -162,9 +165,7 @@ function onMonkeyUp()
 	t = new Tween(monkey,"y",Tween.elasticEaseOut,550,100,3,onMonkeyUp);
 	t.onMotionFinished=onMonkeyDown;
 	t.start();
-	
-
-	
+		
 }
 function onMonkeyDown()
 {

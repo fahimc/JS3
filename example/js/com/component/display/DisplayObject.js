@@ -2,7 +2,7 @@
 //document.write('<scr'+'ipt type="text/javascript" src="js/com/core/JS3.js" ></scr'+'ipt>'); // 
 (function(window) {
 		 
-function DisplayObject() {}
+function DisplayObject() {this.element =document.createElement('div');}
 
 	extend(DisplayObject, EventDispatcher);
 	//DisplayObject.prototype = new EventDispatcher();
@@ -38,7 +38,21 @@ function DisplayObject() {}
 			}
 			public.removeChild = function(child) 
 			{
+				for(var a=0;a<childrenContainer.length;a++)
+				{
+					if(childrenContainer[a] ==child)
+					{
+						childrenContainer.splice(a,1);
+						a=childrenContainer.length+1;
+					}
+				}
 				
+				if(child.element)
+				{
+					this.element.removeChild(child.element);
+				}else{
+					this.element.removeChild(child);
+				}
 			}
 			public.removeChildAt = function(index) 
 			{
@@ -271,6 +285,10 @@ function DisplayObject() {}
 			public.hideMouse = function()
 			{
 			  this.element.style.cursor = "none";
+			}
+			public.clone = function(obj)
+			{
+				this.element =   obj.element.cloneNode(true);
 			}
 	
 window.DisplayObject = DisplayObject;

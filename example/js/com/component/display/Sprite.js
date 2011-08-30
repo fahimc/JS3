@@ -37,7 +37,8 @@ function Sprite(){}
 	}
 	public.endFill = function ()
 	{
-		
+		this.element.setAttribute('id', Math.floor(Math.random()*111111));
+		this.element.setAttribute('name', Math.floor(Math.random()*111111));
 	}
 	// private methods
 	function colorCheck(color)

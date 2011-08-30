@@ -40,7 +40,6 @@
 				 {
 					
 					obj.stop();
-					
 					obj.dispatch(TimerEvent.TIMER_COMPLETE.name);
 					
 				 }else{
@@ -59,10 +58,16 @@
 	 
 	 public.stop = function()
 	 {
-		 var t  = this.timer;
-		 clearInterval(t);
+		
+		if(this.timer) 
+		{
+			
+			clearInterval(this.timer);
+		}
 	 	 this.currentCount=0;
-		 t=null;
+		 this.time = 0;
+		 this.delay = 0;
+
 	 }
 	 
  		  

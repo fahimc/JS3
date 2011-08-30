@@ -171,7 +171,7 @@ t.init = function(obj, prop, func, begin, finish, duration, eventOnComplete){
 			//filter:alpha(opacity=50);}
 			if(obj.filter && obj.filter.alpha)
 			{
-				trace();
+
 				obj.filter.alpha['opacity'] =  _pos;
 			}
 		  }else{
@@ -185,7 +185,7 @@ t.init = function(obj, prop, func, begin, finish, duration, eventOnComplete){
 			if(timer)
 			{
 			timer.removeEventListener(TimerEvent.TIMER_COMPLETE.name,onTimerComplete);
-			timer.removeEventListener(TimerEvent.TIMER.name,onTimerEvent);
+			timer.removeEventListener(TimerEvent.TIMER.name,onAlphaTimerEvent);
 			timer.stop();
 			timer=null;
 			}

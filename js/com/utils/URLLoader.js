@@ -24,19 +24,14 @@ function URLLoader(){}
 		  xhttp=new ActiveXObject("Microsoft.XMLHTTP");
 		  }
 		 xhttp.onreadystatechange=onStatus;
-		 try
-		{
-		 	xhttp.open("GET",url,true);
-		}catch(e)
-		{
-			//trace("here",e);
-		}
+		xhttp.open("GET",url,true);
+		
 		try
 		{
 			xhttp.send();
 		}catch(e)
 		{
-			//trace("here",e);
+			trace("here",e);
 		}
 		
 	}

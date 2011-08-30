@@ -2,7 +2,7 @@
 //document.write('<scr'+'ipt type="text/javascript" src="js/com/core/JS3.js" ></scr'+'ipt>'); // 
 (function(window) {
 		 
-function DisplayObject() {}
+function DisplayObject() {this.element =document.createElement('div');}
 
 	extend(DisplayObject, EventDispatcher);
 	//DisplayObject.prototype = new EventDispatcher();
@@ -38,7 +38,21 @@ function DisplayObject() {}
 			}
 			public.removeChild = function(child) 
 			{
+				for(var a=0;a<childrenContainer.length;a++)
+				{
+					if(childrenContainer[a] ==child)
+					{
+						childrenContainer.splice(a,1);
+						a=childrenContainer.length+1;
+					}
+				}
 				
+				if(child.element)
+				{
+					this.element.removeChild(child.element);
+				}else{
+					this.element.removeChild(child);
+				}
 			}
 			public.removeChildAt = function(index) 
 			{
@@ -144,7 +158,9 @@ function DisplayObject() {}
 			}
 			public.getX = function()
 			{
+				
 				var xx = (this.element.style.left).split("px");
+				if(!xx[0])return 0;
 				return  xx[0];
 			}
 			public.getY = function()
@@ -158,7 +174,10 @@ function DisplayObject() {}
 				this.element.style['opacity'] = value /100 ;
 				
 				this.element.style['-moz-opacity'] = value / 100;
-				if(this.element.filters && this.element.filters.alpha) this.element.filters.alpha['opacity'] =  _pos;
+				
+				this.element.style.filter = "progid:DXImageTransform.Microsoft.Alpha(opacity="+value+")";
+				
+				if(this.element.style.filters ) this.element.filters.alpha['opacity'] =  value;
 			}
 			public.visible = function(value)
 			{
@@ -178,6 +197,8 @@ function DisplayObject() {}
 					var obj = this;
 					var mx;
 					var my;
+					var marX=xx;
+					var marY=yy;
 					if(!this.dragging)
 					{
 					this.dragging=true;
@@ -191,13 +212,23 @@ function DisplayObject() {}
 					function getMousePos(e)
 					{
 						
-						if(window.event.clientX)
+						if( window.event && window.event.clientX)
 						{
 							mx = window.event.clientX;
 							my = window.event.clientY;
 						}else  {
 							mx = e.pageX;
 							my = e.pageY;
+						}
+						// if padding left
+						if(marX)
+						{
+							mx=mx-marX;
+						}
+						// if padding top
+						if(marY)
+						{
+							my=my-marY;
 						}
 						if(w && parseInt(obj.getX())+window.event.clientX < w)
 						{
@@ -229,8 +260,36 @@ function DisplayObject() {}
 			{
 				this.removeEventListener(MouseEvent.MOUSE_DOWN,this.onDragDown);
 			}
-			
-			
+			public.hitTestObject =function(value)
+			{
+				//var hitTest =false;
+				if(parseInt(this.getX())>parseInt(value.getX()) && 
+				parseInt(this.getX()) < parseInt(value.getX())+parseInt(value.getWidth()))
+				{
+					//hitTest=true
+				}else{
+					//hitTest=false;
+					return false;
+				}
+				if(parseInt(this.getY())>parseInt(value.getY()) && 
+				parseInt(this.getY()) < parseInt(value.getY())+parseInt(value.getHeight()))
+				{
+					//hitTest=true;
+				}else{
+					//hitTest=false;
+					return false;
+				}
+				return true;
+				
+			}
+			public.hideMouse = function()
+			{
+			  this.element.style.cursor = "none";
+			}
+			public.clone = function(obj)
+			{
+				this.element =   obj.element.cloneNode(true);
+			}
 	
 window.DisplayObject = DisplayObject;
 }(window));

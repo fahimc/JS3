@@ -2,7 +2,7 @@
 window.onload = frameworkInit();
 
 //global variable
-var extendables={subClass:new Array(),baseClass:[]}
+
 
 
 	/// stage
@@ -15,7 +15,15 @@ function addChild(child)
 	 
 }
 
-
+function removeChild (child) 
+{
+	if(child.element)
+	{
+		document.body.removeChild(child.element);
+	}else{
+		document.body.removeChild(child);
+	}
+}
 
 /// trace class
 function trace ()
@@ -47,16 +55,7 @@ function trace ()
    subClass.superClass = baseClass.prototype;
  
 }
-/*function extendSubClasses()
-{
-	for(var a=0; a< extendables.subClass.length;a++)
-	{		
-		var subc = extendables.subClass[a];
-		subc();
-		subc=null;
-	}
-	 extendables=null;
-}*/
+
 ///browser detection
 function Browser()
 {
@@ -109,7 +108,7 @@ function frameworkInit()
 {
 	
 	
-	//extendSubClasses();
+	
 	
 	
 	

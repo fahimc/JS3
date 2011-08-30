@@ -30,6 +30,14 @@ window.MouseEvent =
 		MOUSE_DOWN:{name:"mousedown",target:"parent",on:true},
 		MOUSE_UP:{name:"mouseup",target:"parent",on:true}
 	};
+// touch events
+window.TouchEvent = 
+	{
+		TOUCH_END:{name:"touchend ",target:document,on:false},
+		TOUCH_MOVE:{name:"touchmove ",target:document,on:false},
+		TOUCH_START:{name:"ontouchstart",target:document,on:false}
+	};
+
 // standard events
 window.Event =
 {
