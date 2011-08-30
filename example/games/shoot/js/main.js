@@ -107,7 +107,7 @@ function removeSplash()
 function onClick()
 {
 	var hitTest =false;
-	if(parseInt(target.getX())>parseInt(monkey.getX()) && 
+	/*if(parseInt(target.getX())>parseInt(monkey.getX()) && 
 	parseInt(target.getX()) < parseInt(monkey.getX())+parseInt(monkey.getWidth()))
 	{
 		hitTest=true
@@ -122,7 +122,8 @@ function onClick()
 	}else{
 		hitTest=false;
 		return;
-	}
+	}*/
+	if(!target.hitTestObject(monkey))return;
 	currentPoints++;
 	points.text("POINTS: "+currentPoints);
 	 if(t1)
@@ -147,7 +148,8 @@ function init()
 {
 	splash.visible(false);
 	sprite.visible(false);
-	target.startDrag();
+	target.hideMouse();
+	target.startDrag(null,null,(target.getWidth() * 0.5),(target.getHeight() * 0.5));
 target.addEventListener(MouseEvent.CLICK,onClick);
 onMonkeyUp();
 	

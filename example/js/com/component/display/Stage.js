@@ -37,6 +37,7 @@ function Stage()
 				if(console.debugging)viewportheight=viewportheight-console.getHeight();
 				return viewportheight;
 		 }
+		 
 // debugger
 function JSDebugger(){}
 	extend(JSDebugger,DisplayObject);

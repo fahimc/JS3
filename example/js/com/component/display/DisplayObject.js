@@ -183,6 +183,8 @@ function DisplayObject() {}
 					var obj = this;
 					var mx;
 					var my;
+					var marX=xx;
+					var marY=yy;
 					if(!this.dragging)
 					{
 					this.dragging=true;
@@ -203,6 +205,16 @@ function DisplayObject() {}
 						}else  {
 							mx = e.pageX;
 							my = e.pageY;
+						}
+						// if padding left
+						if(marX)
+						{
+							mx=mx-marX;
+						}
+						// if padding top
+						if(marY)
+						{
+							my=my-marY;
 						}
 						if(w && parseInt(obj.getX())+window.event.clientX < w)
 						{
@@ -234,8 +246,32 @@ function DisplayObject() {}
 			{
 				this.removeEventListener(MouseEvent.MOUSE_DOWN,this.onDragDown);
 			}
-			
-			
+			public.hitTestObject =function(value)
+			{
+				//var hitTest =false;
+				if(parseInt(this.getX())>parseInt(value.getX()) && 
+				parseInt(this.getX()) < parseInt(value.getX())+parseInt(value.getWidth()))
+				{
+					//hitTest=true
+				}else{
+					//hitTest=false;
+					return false;
+				}
+				if(parseInt(this.getY())>parseInt(value.getY()) && 
+				parseInt(this.getY()) < parseInt(value.getY())+parseInt(value.getHeight()))
+				{
+					//hitTest=true;
+				}else{
+					//hitTest=false;
+					return false;
+				}
+				return true;
+				
+			}
+			public.hideMouse = function()
+			{
+			  this.element.style.cursor = "none";
+			}
 	
 window.DisplayObject = DisplayObject;
 }(window));
