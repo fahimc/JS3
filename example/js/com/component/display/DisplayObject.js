@@ -161,9 +161,9 @@ function DisplayObject() {}
 				
 				this.element.style['-moz-opacity'] = value / 100;
 				
+				this.element.style.filter = "progid:DXImageTransform.Microsoft.Alpha(opacity="+value+")";
 				
-				
-				if(this.element.style.filters ) this.element.filters.alpha['opacity'] =  _pos;
+				if(this.element.style.filters ) this.element.filters.alpha['opacity'] =  value;
 			}
 			public.visible = function(value)
 			{
@@ -196,7 +196,7 @@ function DisplayObject() {}
 					function getMousePos(e)
 					{
 						
-						if(window.event.clientX)
+						if( window.event && window.event.clientX)
 						{
 							mx = window.event.clientX;
 							my = window.event.clientY;

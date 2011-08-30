@@ -72,7 +72,8 @@ t._finish = 0;
 t.name = '';
 t.suffixe = '';
 t._listeners = new Array();	
-t.completeEvent;
+t.completeEvent=null;
+t.running=true;
 t.setTime = function(t){
 	this.prevTime = this._time;
 	if (t > this.getDuration()) {
@@ -121,9 +122,12 @@ t.getFinish = function(){
 	return this.begin + this.change;
 };
 t.init = function(obj, prop, func, begin, finish, duration, eventOnComplete){
-	if (!arguments.length) return;
+	if (!arguments.length) 
+	{
+		return;
+	}
 	// JS3 conversion
-	
+	this.running=true;
 	if(obj.element)
 	{
 		obj = obj.element;
@@ -132,7 +136,9 @@ t.init = function(obj, prop, func, begin, finish, duration, eventOnComplete){
 	}
 	if(tweenConversion[prop])
 	{
+		
 		prop = tweenConversion[prop];
+		
 	}
 	
 	//
@@ -142,45 +148,70 @@ t.init = function(obj, prop, func, begin, finish, duration, eventOnComplete){
 		var eventComplete =eventOnComplete;
 		var _pos = begin * 100;
 		var obj = obj;
+		obj.running=this.running;
+		obj.prop = prop;
+		obj.completeEvent=eventOnComplete;
 		var substract = Math.abs(_pos - finish)/stage.frameRate;
 		var end = (duration ) * stage.frameRate; 
-		var timer =new Timer(stage.frameRate,end);
 		var curentTime=0;
-		timer.addEventListener(TimerEvent.TIMER.name,onTimerEvent);
-		timer.addEventListener(TimerEvent.TIMER_COMPLETE.name,onTimerComplete);
+		var timer =new Timer(stage.frameRate,end);
 		
-		
-		
-		timer.start();
-		
-		 function onTimerEvent()
+		var onAlphaTimerEvent=function()
 		{
-			
+			 
+          if(obj && obj.running)
+		  {
 			_pos =_pos - substract;
 			if(_pos < 0)_pos=0;
 			
 			obj.style['opacity'] = _pos / 100;
-			
 			obj.style['-moz-opacity'] = _pos / 100;
-			
-			if(obj.filters && obj.filters.alpha) obj.filters.alpha['opacity'] =  _pos;
+			obj.style['-khtml-opacity'] = _pos / 100;
+			obj.style.filter = "progid:DXImageTransform.Microsoft.Alpha(opacity="+_pos+")";
+			//filter:alpha(opacity=50);}
+			if(obj.filter && obj.filter.alpha)
+			{
+				trace();
+				obj.filter.alpha['opacity'] =  _pos;
+			}
+		  }else{
+			 
+		  	onTimerComplete();
+		  }
 			
 		}
-		function onTimerComplete()
+		var onTimerComplete=function()
 		{
+			if(timer)
+			{
 			timer.removeEventListener(TimerEvent.TIMER_COMPLETE.name,onTimerComplete);
 			timer.removeEventListener(TimerEvent.TIMER.name,onTimerEvent);
 			timer.stop();
 			timer=null;
+			}
+			if(obj && obj.completeEvent)obj.completeEvent();
 			
-			if(eventComplete)eventComplete();
+			eventComplete =null;
+			_pos = null;
+			obj = null;
+			substract = null
+			end = null; 
+			curentTime=null;
+			
 		}
+		timer.addEventListener(TimerEvent.TIMER.name,onAlphaTimerEvent);
+		timer.addEventListener(TimerEvent.TIMER_COMPLETE.name,onTimerComplete);
+		timer.start();
+
+		
+		
 	}else{
 		
 		this._listeners = new Array();
 		this.addListener(this);
 		this.suffixe = 'px';
 		this.obj = obj.style;
+		
 		this.prop = prop;
 		this.begin = begin;
 		this._pos = begin;
@@ -190,7 +221,7 @@ t.init = function(obj, prop, func, begin, finish, duration, eventOnComplete){
 		}
 		
 		this.setFinish(finish);	
-		
+
 	}
 }
 t.start = function(){
@@ -228,8 +259,13 @@ t.nextFrame = function(){
 	this.setTime((this.getTimer() - this._startTime) / 1000);
 	}
 t.stop = function(){
+	if(this.prop=="alpha")
+	{
+		this.running=false;
+	}else{
 	this.stopEnterFrame();
 	this.broadcastMessage('onMotionStopped',{target:this,type:'onMotionStopped'});
+	}
 }
 t.stopEnterFrame = function(){
 	this.isPlaying = false;

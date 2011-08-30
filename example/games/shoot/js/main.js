@@ -128,7 +128,7 @@ function onClick()
 	 if(t1)
 	 {
 		 t1.stop();
-		 t1=null;
+		 
 	 }
 	monkey.visible(false);
 	splat.alpha(1);
