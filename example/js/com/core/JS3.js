@@ -67,6 +67,7 @@ function Browser()
 	   return boolean;
   }
 }
+
 //// find relative x position
 function findPosX(obj)
   {

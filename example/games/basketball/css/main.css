@@ -1,0 +1,5 @@
+/* CSS Document */
+html,body{margin:0px; padding:0px;}
+body{left:10px; font-family:Arial, Helvetica, sans-serif; color:#FFF; overflow:hidden;}
+.bg{position:absolute;}
+.basketball{background:url(../images/basketball.png) 0 0 no-repeat;}

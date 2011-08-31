@@ -25,15 +25,25 @@ function onLoad()
 		sprite.x(100);
 		sprite.y(100);
 		addChild(sprite);
-	//sprite.rotation(380);
-    timer = new Timer(31);
-	timer.addEventListener(TimerEvent.TIMER.name,onEnterFrame);
-	timer.start();
+		sprite.addEventListener(MouseEvent.MOUSE_DOWN,onTouch);
+		sprite.addEventListener(TouchEvent.TOUCH_END,onEndTouch);
 	  
 }
-
-function onEnterFrame()
+function onTouch()
 {
-	var rt =parseInt(sprite.getRotation())+1;
-	sprite.rotation(rt);
+	
+	
+	sprite.addEventListener(TouchEvent.TOUCH_MOVE,onMove);
+}
+function onMove(event)
+{
+	
+	 var touch = event.touches[0];
+	
+	sprite.x(touch.pageX);
+	sprite.y(touch.pageY);
+}
+function onEndTouch()
+{
+	sprite.removeEventListener(TouchEvent.TOUCH_MOVE,onMove);
 }

@@ -4,6 +4,7 @@ function Stage()
 		extend(Stage,DisplayObject);
 		var public = Stage.prototype;
 		public.frameRate=31;
+		public.isMobile=false;
 		this.element = document.body;
 		public.stageWidth = function()
 		 {
@@ -74,6 +75,10 @@ function JSDebugger(){}
 		p.innerHTML=value;
 		this.element.appendChild(p);
 		 p=null;
+	}
+	public.mobileMode = function(value)
+	{
+		this.isMobile=value;
 	}
 	
 
