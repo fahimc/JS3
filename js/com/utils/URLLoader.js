@@ -43,7 +43,7 @@ function URLLoader(){}
     		//public.xml=xhttp.responseText;
 			public.xml=xhttp.responseXML;
 			
-			dispatchEvent(Event.ON_COMPLETE,true,false);
+			this.dispatch(Event.ON_COMPLETE.name);
     	}
 	}
 

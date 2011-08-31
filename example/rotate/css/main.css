@@ -1,0 +1,11 @@
+/* CSS Document */
+html,body{margin:0px; padding:0px;}
+body{left:10px; font-family:Arial, Helvetica, sans-serif; color:#FFF;}
+.red{background-color: #64b1ff; border:1px #000 solid; overflow:hidden;}
+.grass{background:url(../images/grass.png) 0 0 no-repeat;}
+.target{background:url(../images/target.png) 0 0 no-repeat;}
+.monkey{background:url(../images/monkey.png) 0 0 no-repeat;}
+.splat{background:url(../images/hit.png) 0 0 no-repeat;}
+.points{background:#fff; color:#900; font-size:12px; font-family:Verdana, Geneva, sans-serif; font-weight:bold; border:2px solid #900;}
+.points p{margin:10px 10px 10px 10px; padding:0px; width:130px; text-align:center;}
+.splash{background:url(../images/splash.png) 0 0 no-repeat;}

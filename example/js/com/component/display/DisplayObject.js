@@ -14,7 +14,8 @@ function DisplayObject() {this.element =document.createElement('div');}
 	// public properties:
 	public.element =document.createElement('div');
 	public.element.style.position = "absolute";
-	
+	public.deg2radians = Math.PI * 2 / 360;
+	public.elementRotation=0;
 	// private properties
 	public.childrenContainer=[];
 	
@@ -290,6 +291,35 @@ function DisplayObject() {this.element =document.createElement('div');}
 			{
 				this.element =   obj.element.cloneNode(true);
 			}
-	
+			public.rotation = function(value)
+			{
+				this.elementRotation=value;
+				this.element.style.transform="rotate("+value+"deg)";
+				this.element.style.webkitTransform = "rotate("+value+"deg)";
+				this.element.style['-ms-transform'] = "rotate("+value+"deg)";
+				this.element.style.MozTransform = "rotate("+value+"deg)";
+				 
+				this.element.style.filter ="progid:DXImageTransform.Microsoft.Matrix(sizingMethod='auto expand')";
+				this.fnSetRotation(value);
+			}
+			public.fnSetRotation =function( deg)
+			
+			{
+				
+			    var rad = deg * this.deg2radians ;
+				var costheta = Math.cos(rad);
+				var sintheta = Math.sin(rad);
+				this.element.filters.item(0).M11 = costheta;
+				this.element.filters.item(0).M12 = -sintheta;
+				this.element.filters.item(0).M21 = sintheta;
+				this.element.filters.item(0).M22 = costheta;
+			    rad =null;
+			    costheta =null;
+			    sintheta=null;
+			} 
+			public.getRotation =function()
+			{
+				return this.elementRotation;
+			}
 window.DisplayObject = DisplayObject;
 }(window));
