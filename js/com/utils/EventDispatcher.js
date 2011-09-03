@@ -41,7 +41,7 @@ public.checkEvent = function (event)
 	if(this.checkObjects(event,MouseEvent))return true;
 	if(this.checkObjects(event,KeyboardEvent))return true;
 	if(this.checkObjects(event,Event))return true;
-	
+	if(this.checkObjects(event,TouchEvent))return true;
 	///for(var key in MouseEvent)
 	//{
 	//	 var obj = MouseEvent[key];

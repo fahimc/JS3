@@ -33,9 +33,9 @@ window.MouseEvent =
 // touch events
 window.TouchEvent = 
 	{
-		TOUCH_END:{name:"touchend ",target:document,on:false},
-		TOUCH_MOVE:{name:"touchmove ",target:document,on:false},
-		TOUCH_START:{name:"ontouchstart",target:document,on:false}
+		TOUCH_END:{name:"touchend",target:document,on:false},
+		TOUCH_MOVE:{name:"touchmove",target:document,on:false},
+		TOUCH_START:{name:"touchstart",target:document,on:false}
 	};
 
 // standard events

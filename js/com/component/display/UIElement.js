@@ -11,9 +11,11 @@ function UIElement(){}
 	// public properties:
 	public.name;
 	public.styleName;
-	this.label=null;
+	public.backgroundImageSrc;
+	public.backgroundImage;
+	public.backgroundUrl
 	// private properties:
-	
+	this.label=null;
 	// public methods:
 	
 			public.build = function() 
@@ -21,14 +23,23 @@ function UIElement(){}
 				
 			  this.element = document.createElement('div');
 			  this.element.setAttribute('id',this.name);
-			
+			 // this.backgroundImage.setAttribute('id',this.name);	
 			  //public.element.innerHTML  = "hello world";
 			 // trace("build");
 			}
 			public.setStyle = function() 
 			{
-				
+				//trace(this.backgroundImageSrc);
 				 this.element.setAttribute("class",this.styleName);
+				if(this.backgroundUrl)
+				{
+					
+					this.backgroundImage = document.createElement('img');
+					this.backgroundImage.setAttribute('height', '100%');
+					this.backgroundImage.setAttribute('width', '100%');
+					this.backgroundImage.setAttribute("src",this.backgroundUrl);
+					this.element.appendChild(this.backgroundImage);
+				}
 				 this.setDefaultStyle();
 				 
 			}
@@ -56,7 +67,6 @@ function UIElement(){}
 				 this.label.innerHTML=value;
 				}
 			}
-			
 window.UIElement = UIElement;
 }(window));	
 //extendables.subClass.push(UIElement);

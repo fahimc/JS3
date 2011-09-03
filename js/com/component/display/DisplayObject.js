@@ -14,13 +14,15 @@ function DisplayObject() {this.element =document.createElement('div');}
 	// public properties:
 	public.element =document.createElement('div');
 	public.element.style.position = "absolute";
-	
-	// private properties
+	public.deg2radians = Math.PI * 2 / 360;
+	public.elementRotation=0;
 	public.childrenContainer=[];
+
+	// private properties
 	
 	
 	// public methods:
-	public.addChild = function(child) 
+	       public.addChild = function(child) 
 			{
 				
 				this.childrenContainer.push(child);
@@ -91,46 +93,7 @@ function DisplayObject() {this.element =document.createElement('div');}
 		
 				return this.element.style.height.split("px").join("") ;
 			}
-			/*public.addEventListener = function(eventName,functionName)
-			{
-				
-
-				var b = new Browser();
-				var elem = this.element;
-				if(eventName.target!="parent")elem=eventName.target;
-				
-				
-				
-				if(b.isIE())
-				{
-					var ename = eventName.name;
-					if(eventName.on)ename='on'+eventName.name;
-					
-					elem.attachEvent(ename,functionName);
-				}else{
-					
-					elem.addEventListener(eventName.name,functionName,false);
-				}
-				b=null;
-				
-			}
-			public.removeEventListener = function(eventName,functionName)
-			{
-				//trace(eventName);
-				var b = new Browser();
-				var elem = this.element;
-				if(eventName.target!="parent")elem=eventName.target;
-				
-				if(b.isIE())
-				{
-					elem.detachEvent('on'+eventName.name,functionName);
-				}else{
-					
-					elem.removeEventListener(eventName.name,functionName,false);
-				}
-				b=null;
-				
-			}*/
+			
 			public.buttonMode = function(boolean)
 			{
 				if(boolean)
@@ -290,6 +253,36 @@ function DisplayObject() {this.element =document.createElement('div');}
 			{
 				this.element =   obj.element.cloneNode(true);
 			}
-	
+			public.rotation = function(value)
+			{
+				this.elementRotation=value;
+				this.element.style.transform="rotate("+value+"deg)";
+				this.element.style.webkitTransform = "rotate("+value+"deg)";
+				this.element.style['-ms-transform'] = "rotate("+value+"deg)";
+				this.element.style.MozTransform = "rotate("+value+"deg)";
+				 
+				this.element.style.filter ="progid:DXImageTransform.Microsoft.Matrix(sizingMethod='auto expand')";
+				this.fnSetRotation(value);
+			}
+			public.fnSetRotation =function( deg)
+			
+			{
+				
+			    var rad = deg * this.deg2radians ;
+				var costheta = Math.cos(rad);
+				var sintheta = Math.sin(rad);
+				this.element.filters.item(0).M11 = costheta;
+				this.element.filters.item(0).M12 = -sintheta;
+				this.element.filters.item(0).M21 = sintheta;
+				this.element.filters.item(0).M22 = costheta;
+			    rad =null;
+			    costheta =null;
+			    sintheta=null;
+			} 
+			public.getRotation =function()
+			{
+				return this.elementRotation;
+			}
+			
 window.DisplayObject = DisplayObject;
 }(window));

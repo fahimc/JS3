@@ -4,6 +4,7 @@ function Stage()
 		extend(Stage,DisplayObject);
 		var public = Stage.prototype;
 		public.frameRate=31;
+		public.isMobile=false;
 		this.element = document.body;
 		public.stageWidth = function()
 		 {
@@ -37,7 +38,36 @@ function Stage()
 				if(console.debugging)viewportheight=viewportheight-console.getHeight();
 				return viewportheight;
 		 }
-		 
+		 public.addChild = function(child) 
+	{
+		
+		
+		if(child.element)
+		{
+			
+			document.body.appendChild(child.element);
+		}else{
+			document.body.appendChild(child);
+		}
+	}
+	public.removeChild = function(child) 
+			{
+				for(var a=0;a<childrenContainer.length;a++)
+				{
+					if(childrenContainer[a] ==child)
+					{
+						childrenContainer.splice(a,1);
+						a=childrenContainer.length+1;
+					}
+				}
+				
+				if(child.element)
+				{
+					document.body.removeChild(child.element);
+				}else{
+					document.body.removeChild(child);
+				}
+			}
 // debugger
 function JSDebugger(){}
 	extend(JSDebugger,DisplayObject);
@@ -75,8 +105,12 @@ function JSDebugger(){}
 		this.element.appendChild(p);
 		 p=null;
 	}
+	public.mobileMode = function(value)
+	{
+		this.isMobile=value;
+	}
 	
-
+	 
 window.console= new JSDebugger();
 window.stage = new Stage();
 }(window));	
