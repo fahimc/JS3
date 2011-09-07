@@ -60,6 +60,8 @@ function UIElement(){}
 				if(!this.label)
 				{
 				this.label = document.createElement("p");
+				this.label.style.padding="0px";
+				this.label.style.margin="0px";
      		    var oText = document.createTextNode(value);
                 this.label.appendChild(oText);
                 this.element.appendChild(this.label);

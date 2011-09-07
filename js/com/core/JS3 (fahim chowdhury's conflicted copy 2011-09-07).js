@@ -1,8 +1,3 @@
-//!  A core class. 
-/*!
-  JS3 core.
-*/
-
 // imports
 IMPORT('js/com/events/Events');
 	IMPORT('js/com/events/EventDispatcher');	
@@ -18,9 +13,6 @@ IMPORT('js/com/events/Events');
 
 
 	/// stage
-//! An addChild.
-/*! More detailed enum description. */
-/*!< Enum value child. */  
 
 // addchild
 function addChild(child)
@@ -144,73 +136,6 @@ function META(name,content)
 	}
 
 }
-// get css value
-function getCssValue(selector, attribute) {
-        var raw = getRawCss(selector);
-		
-        if (!raw) {
-            return null;
-        }
-        var parts = raw.split(';');
-		
-        for (var i in parts) {
-           // var subparts = parts[i].split(':');
-		  // trace(parts[i]);
-			//trace("subparts",subparts[0].indexOf(attribute));
-			if(parts[i].indexOf(attribute)>-1){
-           // if (trimString(subparts[0]) == attribute) {
-			   // if the is a trailing bracket remove it
-			   var subpart =parts[i].split('{');
-			   // if sub part has trailing bracket remove first node
-			   if(subpart.length>1)
-			   {
-				   subpart = subpart[1];
-			   }else{
-			   	subpart = subpart[0];
-			   }
-			   // see if subpart has attribute name
-			   subpart =subpart.split(attribute);
-			 
-			   // if sub part has trailing attribute name remove first node
-			    if(subpart.length>1)
-				{
-					subpart = subpart[1];
-				}else{
-					subpart = subpart[0];
-				}
-				// if subpart has colon
-				if(subpart.charAt(0)==":")
-				{
-					subpart=subpart.substring(1);
-					
-				}
-			   // if sub part has trailing colon name remove first node
-			   
-                return subpart;
-            }
-        }
-        return null;
-    }
-
-    function trimString(s) {
-        return s.replace(/^\s+|\s+$/g, ""); 
-    }
-
-    function getRawCss(selector) {
-        for (var i = 0; i < document.styleSheets.length; i++) {
-            var css = document.styleSheets[i].rules || document.styleSheets[i].cssRules;
-            for (var x = 0; x < css.length; x++) {
-				
-                if (css[x].selectorText == selector) {
-                    return (css[x].cssText) ? css[x].cssText : css[x].style.cssText;
-                }
-            }
-        }
-        return null;
-    }
-
-
-//
 // import scripts
 function IMPORT(value)
 {

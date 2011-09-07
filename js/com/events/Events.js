@@ -4,7 +4,7 @@ window.newEvent = function(eventName,trigger,targ)
 {
 	
 	if(!targ)targ = document.body;
-	if(!trigger)trigger=eventType;
+	if(!trigger)trigger=eventName;
 	
 	window[eventName] = 
 	{

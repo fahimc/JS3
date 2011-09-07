@@ -1,19 +1,22 @@
 // JavaScript Document
 (function(window) {
-function URLLoader(){}
-	
 	extend(URLLoader,DisplayObject);
+function URLLoader(){
+	
+	
 	// constructor:
 	var public = URLLoader.prototype;
 	// public properties:
-	public.urlloader;
+	this.urlloader;
 	//public.source = "http://fahimchowdhury.com/test/javascript/php/getData.php?url=";
-	public.source = "playlist.xml";
+	this.source = "playlist.xml";
 	// private properties:
 	var xhttp;
-	public.xml;
+	this.data;
+	this.xml;
+	var obj = this;
 	// public methods:
-	public.load = function(url) 
+	this.load = function(url) 
 	{
 		if (window.XMLHttpRequest)
 		  {
@@ -21,13 +24,14 @@ function URLLoader(){}
 		  }
 		else // IE 5/6
 		  {
-		  xhttp=new ActiveXObject("Microsoft.XMLHTTP");
+		  	xhttp=new ActiveXObject("Microsoft.XMLHTTP");
 		  }
-		 xhttp.onreadystatechange=onStatus;
+		 xhttp.onreadystatechange=this.onStatus;
 		xhttp.open("GET",url,true);
 		
 		try
 		{
+			
 			xhttp.send();
 		}catch(e)
 		{
@@ -35,18 +39,29 @@ function URLLoader(){}
 		}
 		
 	}
-	function onStatus()
+	this.onStatus=function()
     {
-       if (xhttp.readyState==4 && xhttp.status==200)
-    	{
-		
-    		//public.xml=xhttp.responseText;
-			public.xml=xhttp.responseXML;
+		if (xhttp.readyState==4)
+		{
 			
-			dispatchEvent(Event.ON_COMPLETE,true,false);
-    	}
+		 if (xhttp.status==200 || window.location.href.indexOf("http")==-1)
+      // if (xhttp.readyState==4 && xhttp.status==200)
+    	{
+			
+    		//public.xml=xhttp.responseText;
+			obj.data=xhttp.responseText;
+			obj.xml=xhttp.responseXML;
+			obj.dispatch(Event.ON_COMPLETE.name);
+    	}else
+		{
+			//trace("error 1")
+		}
+		}else
+		{
+			//trace("error 2")
+		}
 	}
 
-
+}
 window.URLLoader =  URLLoader;
 }(window));	

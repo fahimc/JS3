@@ -113,4 +113,15 @@ function JSDebugger(){}
 	 
 window.console= new JSDebugger();
 window.stage = new Stage();
+
+stage.addEventListener(Event.ADDED_TO_STAGE,frameworkinit);
+function frameworkinit()
+{
+	document.body.style.margin = '0px';
+    document.body.style.padding = '0px';
+	 document.body.style.overflow = 'hidden';
+   document.getElementsByTagName('html')[0].style.margin = '0px';
+   document.getElementsByTagName('html')[0].style.padding = '0px';
+   stage.removeEventListener(Event.ADDED_TO_STAGE,frameworkinit);
+}
 }(window));	

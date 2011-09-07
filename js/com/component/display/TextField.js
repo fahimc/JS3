@@ -1,10 +1,25 @@
 // JavaScript Document
 (function(window) {
-function TextField(){}
+function TextField()
+{
+	this.setWidth =function(value)
+	{
+		
+		 this.textfield.style.width = value+"px";
+		 this.element.style.width = value+"px";
+	}
+	this.setHeight =function(value)
+	{
+		
+		 this.textfield.style.height = value+"px";
+		 this.element.style.height = value+"px";
+	}
+}
 
 	extend(TextField,UIElement);
 	// constructor:
 	var public = TextField.prototype;
+
 	// public properties:
 	public.textfield;
 	public.right=0;
@@ -47,6 +62,10 @@ function TextField(){}
 	{
 		 this.element.value=value;
 	}
-	
+	public.getText =function()
+	{
+		return  this.textfield.value;
+	}
+
 window.TextField = TextField;
 }(window));	

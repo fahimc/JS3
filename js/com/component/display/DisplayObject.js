@@ -16,7 +16,7 @@ function DisplayObject() {this.element =document.createElement('div');}
 	public.element.style.position = "absolute";
 	public.deg2radians = Math.PI * 2 / 360;
 	public.elementRotation=0;
-	public.childrenContainer=[];
+	public.childrenContainer;
 
 	// private properties
 	
@@ -24,7 +24,10 @@ function DisplayObject() {this.element =document.createElement('div');}
 	// public methods:
 	       public.addChild = function(child) 
 			{
-				
+				if(!this.childrenContainer)
+				{
+					this.childrenContainer = new Array();
+				}
 				this.childrenContainer.push(child);
 				if(child.element)
 				{
@@ -40,12 +43,12 @@ function DisplayObject() {this.element =document.createElement('div');}
 			}
 			public.removeChild = function(child) 
 			{
-				for(var a=0;a<childrenContainer.length;a++)
+				for(var a=0;a<this.childrenContainer.length;a++)
 				{
-					if(childrenContainer[a] ==child)
+					if(this.childrenContainer[a] ==child)
 					{
-						childrenContainer.splice(a,1);
-						a=childrenContainer.length+1;
+						this.childrenContainer.splice(a,1);
+						a=this.childrenContainer.length+1;
 					}
 				}
 				
@@ -62,7 +65,7 @@ function DisplayObject() {this.element =document.createElement('div');}
 			}
 			public.getChildAt = function(index) 
 			{
-				
+				return this.childrenContainer[index];
 			}
 			public.getChildByName = function(name) 
 			{
@@ -74,7 +77,12 @@ function DisplayObject() {this.element =document.createElement('div');}
 			}
 			public.numChildren = function() 
 			{
-				return _childrenContainer.length;
+				if(this.childrenContainer)
+				{
+					return this.childrenContainer.length;
+				}else{
+					return 0;
+				}
 			}
 			public.setWidth =function(value)
 			{
@@ -82,16 +90,34 @@ function DisplayObject() {this.element =document.createElement('div');}
 			}
 			public.getWidth =function()
 			{
-				return this.element.style.width.split("px").join("") ;
+				if(this.getStyleValue("width")!=parseInt(this.getStyleValue("width")))
+				{
+					return 0;
+				}
+				return this.getStyleValue("width");
+				//return this.element.style.width.split("px").join("") ;
 			}
 			public.setHeight =function(value)
 			{
+				
 				 this.element.style.height = value+"px";
 			}
 			public.getHeight =function()
 			{
-		
-				return this.element.style.height.split("px").join("") ;
+				// if auto offsetHeight
+				
+				if(this.getStyleValue("height")!=parseInt(this.getStyleValue("height")) && this.getStyleValue("height")!="auto")
+				{
+					
+					if(this.element.style.height=="auto")
+					{
+						return this.element.style.offsetHeight.split("px").join("");
+					}else{
+						return 0;
+					}
+				}
+				return this.getStyleValue("height");
+				//return this.element.style.height.split("px").join("") ;
 			}
 			
 			public.buttonMode = function(boolean)
@@ -122,14 +148,15 @@ function DisplayObject() {this.element =document.createElement('div');}
 			public.getX = function()
 			{
 				
-				var xx = (this.element.style.left).split("px");
-				if(!xx[0])return 0;
-				return  xx[0];
+				var xx =  this.getStyleValue("left");
+				if(!parseInt(xx))return 0;
+				return  xx;
 			}
 			public.getY = function()
 			{
-				var yy = (this.element.style.top).split("px");
-				return yy[0] ;
+				var yy =  this.getStyleValue("top");
+				if(!parseInt(yy))return 0;
+				return yy ;
 			}
 			public.alpha =function(value) 
 			{
@@ -153,7 +180,9 @@ function DisplayObject() {this.element =document.createElement('div');}
 			}
 			public.setDefaultStyle = function()
 			{
-				public.element.style.position = "absolute";
+				this.element.style.position = "absolute";
+				this.element.style.padding="0px";
+				this.element.style.margin="0px";
 			}
 			public.startDrag= function(w,h,xx,yy)
 			{
@@ -283,6 +312,25 @@ function DisplayObject() {this.element =document.createElement('div');}
 			{
 				return this.elementRotation;
 			}
+			public.getStyleValue=function(value)
+			{
+				var isStyle;
+				if ( this.element.currentStyle && this.element.currentStyle[value]) 
+				{
+					isStyle =  this.element.currentStyle[value];
+				}
+				 else if ( document.defaultView.getComputedStyle && document.defaultView.getComputedStyle( this.element).getPropertyValue(value))
+				{
+					isStyle = document.defaultView.getComputedStyle( this.element).getPropertyValue(value);
+				}else{
+					isStyle =   this.element.style[value];
+				
+				}
+				if(!isStyle)return null;
+				return isStyle.split("px").join("");				
+			}
+			
+			
 			
 window.DisplayObject = DisplayObject;
 }(window));

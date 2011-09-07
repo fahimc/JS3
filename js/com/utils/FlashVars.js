@@ -21,6 +21,12 @@ function FlashVars(){}
        else
        return results[1];
 	}
+	public.getHostURL=function()
+	{
+		var url =new String(document.URL.replace(/\/[^\/]+$/, ''));
+		if(url.charAt(url.length-1)!="/")url = url+"/";
+		return url;
+	}
 
 window.FlashVars = new FlashVars();
 }(window));	

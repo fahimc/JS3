@@ -10,7 +10,6 @@ var model;
 stage.addEventListener(Event.ADDED_TO_STAGE,init);
 function init()
 {
-	
 	stage.removeEventListener(Event.ADDED_TO_STAGE,init);
 	stage.addEventListener(Event.RESIZE,resize);
 	
