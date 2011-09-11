@@ -116,7 +116,16 @@ public.addStandardEventListener = function(obj,eventName,functionName)
 				
 
 				var b = new Browser();
-				var elem = obj.element;
+				var elem ;
+				if(obj==stage)
+				{
+					elem =document;
+				}else if(obj.childHolder)
+				{
+					elem =obj.childHolder;
+				}else{
+					elem =obj.element;
+				}
 				
 				if(eventName.target!="parent")elem=eventName.target;
 				
@@ -139,7 +148,12 @@ public.removeStandardEventListener = function(obj,eventName,functionName)
 {
 	//trace(eventName);
 	var b = new Browser();
-	var elem = obj.element;
+	if(obj.childHolder)
+				{
+					elem =obj.childHolder;
+				}else{
+					elem =obj.element;
+				}
 	if(eventName.target!="parent")elem=eventName.target;
 	
 	if(b.isIE())

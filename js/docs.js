@@ -9,6 +9,7 @@ var urlLoader;
 var classCollection=new Array();
 var currentClass=0;
 var aryClassElements = new Array();
+var classesFrame;
 //add Stage init
 stage.addEventListener(Event.ADDED_TO_STAGE,init);
 function init()
@@ -37,12 +38,31 @@ function init()
 	divder.setWidth(2);
 	divder.y(parseInt(header.getHeight())+10);
 	//addChild(divder);
-
 	
+	var sb = new Sprite();
+	sb.beginFill("#abaaaa");
+	sb.drawRoundRect(0,0,5,5,5);
+	 sb.endFill();
+	 
+	 var sh = new Sprite();
+	sh.beginFill("#006496");
+	sh.drawRoundRect(0,0,10,10,5);
+	 sh.endFill();
+	 
+	var sb2 = new Sprite();
+	sb2.beginFill("#abaaaa");
+	sb2.drawRoundRect(0,0,10,10,5);
+	 sb2.endFill();
+	 
+	 var sh2 = new Sprite();
+	sh2.beginFill("#006496");
+	sh2.drawRoundRect(0,0,10,10,5);
+	 sh2.endFill();
 	 
 	 classesFrame = new UIElement();
 	classesFrame.name = "classes";
-
+	classesFrame.scrollbar=sb;
+	classesFrame.scrollhandle=sh;
 	classesFrame.build();
 	classesFrame.setStyle();
 	classesFrame.arrange();
@@ -55,6 +75,8 @@ function init()
 	
 	classHolder = new UIElement();
 	classHolder.name = "classContent";
+	classHolder.scrollbar=sb2;
+	classHolder.scrollhandle=sh2;
 	classHolder.build();
 	classHolder.setStyle();
 	classHolder.arrange();
@@ -149,7 +171,8 @@ function onXMLLoad()
 		classA[a].setAttribute('onclick','onClassClick('+classCollection[a].id+')');
 		//classA.onclick=onClassClick(+classCollection[a].id);
 		classA[a].innerHTML=classCollection[a].name;
-		document.getElementById("classes").appendChild(classA[a]);
+		
+		classesFrame.addChild(classA[a]);
 		
 		
 	}
@@ -158,7 +181,12 @@ function onXMLLoad()
 }
 function showCurrentClass()
 {
-	document.getElementById("classContent").innerHTML="";
+	//document.getElementById("classContent").innerHTML="";
+
+	for(var g=0; g< classHolder.numChildren();g++)
+	{
+		classHolder.removeChildAt(g);
+	}
 	
 	if(classCollection[currentClass] && classCollection[currentClass].props.length>0)
 	{
@@ -197,7 +225,7 @@ function showCurrentClass()
 
 		}
 
-		document.getElementById("classContent").appendChild(table);
+		classHolder.addChild(table);
 	}
 	//methods
 	if(classCollection[currentClass] && classCollection[currentClass].functions.length>0)
@@ -237,7 +265,7 @@ function showCurrentClass()
 
 		}
 
-		document.getElementById("classContent").appendChild(table);
+		classHolder.addChild(table);
 	}
 	//events
 	if(classCollection[currentClass] && classCollection[currentClass].events.length>0)
@@ -277,7 +305,7 @@ function showCurrentClass()
 
 		}
 
-		document.getElementById("classContent").appendChild(etable);
+		classHolder.addChild(etable);
 	}
 	
 	resize();

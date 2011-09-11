@@ -4,7 +4,7 @@
 extend(Sprite,DisplayObject);
 function Sprite(){
 	//extends
-	
+	this.init();
 	// constructor:
 	var public = Sprite.prototype;
 	// public properties:
@@ -67,10 +67,11 @@ function Sprite(){
 	public.setCorners=function(rad)
 	{
 		
-		
+
 		this.element.style.behavior= 'url(js/com/utils/border-radius.htc)';
 		 this.element.style.webkitBorderRadius = rad+"px";
 		this.element.style.MozBorderRadius = rad+"px";
+		this.element.style['-moz-border-radius']=rad+"px";
 		this.element.style['border-radius']=rad+'px '+rad+'px '+rad+'px '+rad+'px'; 
 	}
 }

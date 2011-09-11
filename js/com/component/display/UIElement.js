@@ -1,6 +1,9 @@
 // JavaScript Document
 (function(window) {
-function UIElement(){}
+function UIElement()
+{
+	this.init();
+}
 	
 	//extends
 	extend(UIElement,DisplayObject);
@@ -21,7 +24,7 @@ function UIElement(){}
 			public.build = function() 
 			{
 				
-			  this.element = document.createElement('div');
+			 // this.element = document.createElement('div');
 			  this.element.setAttribute('id',this.name);
 			 // this.backgroundImage.setAttribute('id',this.name);	
 			  //public.element.innerHTML  = "hello world";

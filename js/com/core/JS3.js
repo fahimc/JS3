@@ -64,6 +64,7 @@ function addChild(child)
 	stageChildren.push(child);
 	if(child.element)
 	{
+		child.purge();
 	    document.body.appendChild(child.element);	
 	}else{
 		document.body.appendChild(child);	

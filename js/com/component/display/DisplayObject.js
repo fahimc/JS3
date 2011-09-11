@@ -2,7 +2,9 @@
 //document.write('<scr'+'ipt type="text/javascript" src="js/com/core/JS3.js" ></scr'+'ipt>'); // 
 (function(window) {
 		 
-function DisplayObject() {this.element =document.createElement('div');}
+function DisplayObject() {
+	this.init();
+	}
 
 	extend(DisplayObject, EventDispatcher);
 	//DisplayObject.prototype = new EventDispatcher();
@@ -20,10 +22,18 @@ function DisplayObject() {this.element =document.createElement('div');}
 	public.deg2radians = Math.PI * 2 / 360;
 	public.elementRotation=0;
 	public.childrenContainer;
+	public.UIChildrenContainer;
+	public.childHolder;
 	public.dragging=false;
 	public.isScrollable=false;
 	// private properties
-	
+	public.init=function()
+	{
+		this.UIChildrenContainer= new Array();
+		this.element =document.createElement('div');
+		this.childHolder = document.createElement('div');
+		this.element.appendChild(this.childHolder);
+	}
 	
 	// public methods:
 	       public.addChild = function(child) 
@@ -35,12 +45,32 @@ function DisplayObject() {this.element =document.createElement('div');}
 				this.childrenContainer.push(child);
 				if(child.element)
 				{
-					this.element.appendChild(child.element);
+					if(this.childHolder)
+					{
+						this.childHolder.appendChild(child.element);
+					}else{
+						this.element.appendChild(child.element);
+					}
 				}else{
-					this.element.appendChild(child);
+					if(this.childHolder)
+					{
+						this.childHolder.appendChild(child);
+					}else{
+						this.element.appendChild(child);
+					}
 				}
 			}
-			
+			 public.addUIChild = function(child) 
+			{
+				this.UIChildrenContainer.push(child);
+				if(child.element)
+					{
+						this.element.appendChild(child.element);
+						
+					}else{
+						this.element.appendChild(child);
+					}
+			}
 			public.addChildAt = function(child, index) 
 			{
 				
@@ -53,8 +83,41 @@ function DisplayObject() {this.element =document.createElement('div');}
 					{
 						if(this.childrenContainer[a] ==child)
 						{
+							
 							this.childrenContainer.splice(a,1);
 							a=this.childrenContainer.length+1;
+						}
+					}
+				}
+				if(child.element)
+				{
+					if(this.childHolder)
+					{
+						this.childHolder.removeChild(child.element);
+					}else{
+						this.element.removeChild(child.element);
+					}
+				}else{
+					if(this.childHolder)
+					{
+						this.childHolder.removeChild(child);
+					}else{
+						this.element.removeChild(child);
+					}
+				}
+			}
+			 public.removeUIChild = function(child) 
+			{
+				
+				if(this.UIChildrenContainer)
+				{
+					for(var a=0;a<this.UIChildrenContainer.length;a++)
+					{
+						if(this.UIChildrenContainer[a] ==child)
+						{
+							
+							this.UIChildrenContainer.splice(a,1);
+							a=this.UIChildrenContainer.length+1;
 						}
 					}
 				}
@@ -79,9 +142,27 @@ function DisplayObject() {this.element =document.createElement('div');}
 				}
 				return false;
 			}
+			public.UIContains = function(child) 
+			{
+				
+				if(this.UIChildrenContainer)
+				{
+					for(var a=0;a<this.UIChildrenContainer.length;a++)
+					{
+						
+						if(this.UIChildrenContainer[a] ==child)
+						{
+							return true;
+						}
+					}
+				}
+				
+				return false;
+			}
 			public.removeChildAt = function(index) 
 			{
 				
+				this.removeChild(this.childrenContainer[index]);
 			}
 			public.getChildAt = function(index) 
 			{
@@ -107,6 +188,10 @@ function DisplayObject() {this.element =document.createElement('div');}
 			public.setWidth =function(value)
 			{
 				 this.element.style.width = value+"px";
+				 if(this.childHolder)
+				{
+				 this.childHolder.style.width = value+"px";
+				}
 			}
 			public.getWidth =function()
 			{
@@ -121,23 +206,22 @@ function DisplayObject() {this.element =document.createElement('div');}
 			{
 				
 				 this.element.style.height = value+"px";
+				 if(this.childHolder)
+				{
+				 this.childHolder.style.height = value+"px";
+				 this.scrollable(); 
+				}
 				
-					this.scrollable(); 
 				
 			}
 			public.getHeight =function()
 			{
 				// if auto offsetHeight
 				
-				if(this.getStyleValue("height")!=parseInt(this.getStyleValue("height")) && this.getStyleValue("height")!="auto")
+				if(this.getStyleValue("height")!=parseInt(this.getStyleValue("height")))
 				{
-					
-					if(this.element.style.height=="auto")
-					{
-						return this.element.style.offsetHeight.split("px").join("");
-					}else{
+		
 						return 0;
-					}
 				}
 				return this.getStyleValue("height");
 				//return this.element.style.height.split("px").join("") ;
@@ -206,6 +290,15 @@ function DisplayObject() {this.element =document.createElement('div');}
 				this.element.style.position = "absolute";
 				this.element.style.padding="0px";
 				this.element.style.margin="0px";
+				this.element.style.overflow="hidden"; 
+				if(this.childHolder)
+				{
+					
+				this.childHolder.style.position = "absolute";
+				this.childHolder.style.padding="0px";
+				this.childHolder.style.margin="0px";	
+				this.childHolder.style.overflow="hidden"; 
+				}
 			}
 			public.startDrag= function(w,h,xx,yy)
 			{
@@ -364,15 +457,19 @@ function DisplayObject() {this.element =document.createElement('div');}
 			public.addStyleName=function(value)
 			{
 				 this.element.setAttribute("class",value);
+				 if(this.childHolder)
+				{
+				 this.childHolder.setAttribute("class",value);
+				}
 			}
 			public.scrollable=function(value)
 			{
 				
-				//trace(this.getHeight(),this.element.scrollHeight)
-				if(this.element.scrollHeight>this.getHeight())
+				
+				if(this.childHolder.scrollHeight>this.getHeight())
 				{
 
-					this.element.style.overflow="hidden"; 
+					this.childHolder.style.overflow="hidden"; 
 					
 					if(!this.scrollbar)
 					{
@@ -386,7 +483,7 @@ function DisplayObject() {this.element =document.createElement('div');}
 					{
 						
 						this.scrollhandle = new DisplayObject();
-						this.scrollhandle.addStyleName('handle');	
+						this.scrollhandle.addStyleName('scrollhandle');	
 						
 					}
 					
@@ -405,12 +502,12 @@ function DisplayObject() {this.element =document.createElement('div');}
 				{
 					if(value!=false)
 					{
-					this.scrollbar.x(parseInt(this.getX())+parseInt(this.getWidth()));
-					this.scrollbar.y(parseInt(this.getY()));
+					this.scrollbar.x(parseInt(this.getWidth()));
+					this.scrollbar.y(0);
 					this.scrollbar.setHeight(this.getHeight());
-					var ratio = this.getHeight()/this.element.scrollHeight;
+					var ratio = this.getHeight()/this.childHolder.scrollHeight;
 					//trace(this.scrollbar.getHeight() * ratio);
-					this.scrollhandle.x(0);
+					this.scrollhandle.x((this.scrollbar.getWidth() * 0.5)-(this.scrollhandle.getWidth() * 0.5));
 						this.scrollhandle.y(0);
 						this.scrollhandle.buttonMode(true);
 					this.scrollhandle.setHeight(this.scrollbar.getHeight() * ratio);	
@@ -425,33 +522,49 @@ function DisplayObject() {this.element =document.createElement('div');}
 					var startY;
 					var obj = this;
 					var isScrolling=false;
-					if(!contains(this.scrollbar))
+					
+					if(!this.UIContains(this.scrollbar))
 					{
+						
 					this.scrollhandle.addEventListener(MouseEvent.MOUSE_DOWN,onScrollMouseDown);
 					stage.addEventListener(MouseEvent.MOUSE_MOVE,mouseUpDate);
 					// document.onmousemove =mosueUpDate;
 					  this.addEventListener(MouseEvent.MOUSE_WHEEL, onWheelScrollMouse);  
 					  this.addEventListener(TouchEvent.TOUCH_START,onTouch);
 		    		   this.addEventListener(TouchEvent.TOUCH_MOVE,onTouchMove);
+					  
 					   this.scrollbar.addChild(this.scrollhandle);
-					   addChild(this.scrollbar);
+					   this.addUIChild(this.scrollbar.element);
+					   
+					}else{
+						
 					}
+					this.scrollbar.visible(true);
+					this.scrollhandle.visible(true);
 					 mouseUpDate();
 					 
 					}else{
-						document.onmousedown = null;  
-						document.onmousemove =null;
-						document.onmouseup=null;
-						stage.removeEventListener(MouseEvent.MOUSE_MOVE,mouseUpDate);
-						this.scrollhandle.removeEventListener(MouseEvent.MOUSE_DOWN,onScrollMouseDown);
+						//document.onmousedown = null;  
+						//document.onmousemove =null;
+						//document.onmouseup=null;
+						stage.removeEventListener(MouseEvent.MOUSE_MOVE,mouseUpDate)
+						stage.removeEventListener(MouseEvent.MOUSE_MOVE,onHandleMove);
 						this.removeEventListener(MouseEvent.MOUSE_WHEEL, onWheelScrollMouse);  
-						
-							this.scrollbar.removeChild(this.scrollhandle);
-							removeChild(this.scrollbar);
-						
+						 this.removeEventListener(MouseEvent.MOUSE_UP,onScrollMouseUp);
+						if(this.scrollbar.contains(this.scrollhandle))
+						{
+						this.scrollhandle.removeEventListener(MouseEvent.MOUSE_DOWN,onScrollMouseDown);
+						this.scrollbar.removeChild(this.scrollhandle);
+						}
+						if(this.UIContains(this.scrollbar))
+						{
+						this.removeUIChild(this.scrollbar.element);
+						}
 						this.isScrollable=false;
-						this.scrollbar=null;
-						this.scrollhandle=null;
+						this.scrollbar.visible(false);
+						this.scrollhandle.visible(false);
+						//this.scrollbar=null;
+						//this.scrollhandle=null;
 					
 					}
 					function onTouch(event)
@@ -472,7 +585,7 @@ function DisplayObject() {this.element =document.createElement('div');}
 						 {
 						 sh.y(eley);
 						 ratio = sh.getY()/sb.getHeight();
-						 obj.element.scrollTop=ratio * obj.element.scrollHeight;
+						 obj.childHolder.scrollTop=ratio * obj.childHolder.scrollHeight;
 						 }
 						var touch = event.touches[0];
 						mouseY = parseInt(touch.pageY)-parseInt(sh.getY());
@@ -482,8 +595,8 @@ function DisplayObject() {this.element =document.createElement('div');}
 						
 						e = e ? e : window.event;
   						var wheelData = e.detail ? e.detail : e.wheelDelta;
-						 obj.element.scrollTop-=wheelData;
-						 ratio =  obj.element.scrollTop/obj.element.scrollHeight;
+						 obj.childHolder.scrollTop-=wheelData;
+						 ratio =  obj.childHolder.scrollTop/obj.childHolder.scrollHeight;
 						 
 							sh.y(sb.getHeight() * ratio);
 					}
@@ -499,10 +612,11 @@ function DisplayObject() {this.element =document.createElement('div');}
 						stage.removeEventListener(MouseEvent.MOUSE_MOVE,mouseUpDate);
 						stage.addEventListener(MouseEvent.MOUSE_MOVE,onHandleMove);
 						 //document.onmousemove =onHandleMove;
-						 document.onmouseup=onScrollMouseUp;
+						 stage.addEventListener(MouseEvent.MOUSE_UP,onScrollMouseUp);
+						// document.onmouseup=onScrollMouseUp;
 						
 						graby = mouseY;
-						sh.element.zIndex = 0;
+						sh.childHolder.zIndex = 0;
 						eley = oriy = sh.element.offsetTop;
 						 return false;
 						//trace("drag",sh);
@@ -516,22 +630,42 @@ function DisplayObject() {this.element =document.createElement('div');}
 						 {
 						 sh.y(eley);
 						 ratio = sh.getY()/sb.getHeight();
-						 obj.element.scrollTop=ratio * obj.element.scrollHeight;
+						 obj.childHolder.scrollTop=ratio * obj.childHolder.scrollHeight;
 						 }
 						 mouseUpDate(e);
   						 return false;
 					}
 					function onScrollMouseUp(e)
 					{
-						sh.element.zIndex = 0;
+						sh.childHolder.zIndex = 0;
 						stage.removeEventListener(MouseEvent.MOUSE_MOVE,onHandleMove);
 						stage.addEventListener(MouseEvent.MOUSE_MOVE,mouseUpDate);
 						//document.onmousemove = mosueUpDate;
-  						document.onmouseup = null;
-  						document.onmousedown = null;  
+  						//document.onmouseup = null;
+  						//document.onmousedown = null;  
 						sh.addEventListener(MouseEvent.MOUSE_DOWN,onScrollMouseDown);
 					}
 					function falsefunc() { return false; } // used to block cascading events
+					public.purge = function()
+					{
+						if(this.scrollbar)
+						{
+							
+						document.onmousedown = null;  
+						document.onmousemove =null;
+						document.onmouseup=null;
+						stage.removeEventListener(MouseEvent.MOUSE_MOVE,mouseUpDate);
+						this.scrollhandle.removeEventListener(MouseEvent.MOUSE_DOWN,onScrollMouseDown);
+						this.removeEventListener(MouseEvent.MOUSE_WHEEL, onWheelScrollMouse);  
+						
+							this.scrollbar.removeChild(this.scrollhandle);
+							this.removeUIChild(this.scrollbar.element);
+						
+						this.isScrollable=false;
+						//this.scrollbar=null;
+						//this.scrollhandle=null;
+						}
+					}
 				}
 			
 window.DisplayObject = DisplayObject;
