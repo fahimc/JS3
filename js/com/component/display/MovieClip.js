@@ -12,7 +12,7 @@ function MovieClip(){
 		public.image=new Image();
 		public.frameRate =stage.frameRate;
 		public.loop=true;
-		
+		public.imageDir = "horizontal";
 		
 		public.setFrameRate=function(value)
 		{
@@ -35,7 +35,6 @@ function MovieClip(){
 			// this.image = new Image();
 			
 			 this.image.src = this.src;
-			
 			this.element.style.backgroundImage= 'url('+this.image.src+')';
 		}
 		public.gotoAndPlay = function(index,toLoop)
@@ -43,7 +42,7 @@ function MovieClip(){
 			if(toLoop==true||toLoop==false)this.loop=toLoop;
 			var clip = this;
 			var timer =new Timer(parseInt(this.getFrameRate()));
-			timer.addEventListener(TimerEvent.TIMER,onFrameTimer);
+			timer.addEventListener(TimerEvent.TIMER.name,onFrameTimer);
 			timer.start();
 			
 			function onFrameTimer()
@@ -61,16 +60,32 @@ function MovieClip(){
 					clip.currentFrame=0;
 				}else{
 				  timer.stop();
-				  timer.removeEventListener(TimerEvent.TIMER_COMPLETE,onFrameTimer);
+				  timer.removeEventListener(TimerEvent.TIMER.name,onFrameTimer);
 				  timer=null;
 				  clip=null;
 				}
 			}else
 			{
-				clip.element.style.backgroundPosition =(-parseInt(clip.frameWidth)*parseInt(clip.currentFrame)) + 'px ' + 0 + 'px';
-				
+				if(clip.imageDir == "horizontal")
+				{
+					clip.element.style.backgroundPosition =(-parseInt(clip.frameWidth)*parseInt(clip.currentFrame)) + 'px ' + 0 + 'px';
+				}else{
+					clip.element.style.backgroundPosition =(0 + 'px'+ -parseInt(clip.frameWidth)*parseInt(clip.currentFrame)) + 'px ';
+				}
 		    }
 		   }
+		}
+		public.gotoAndStop = function(index)
+		{
+			this.currentFrame=index;
+			
+			if(this.imageDir == "horizontal")
+				{
+					this.element.style.backgroundPosition =(-parseInt(this.frameWidth)*parseInt(this.currentFrame)) + 'px ' + 0 + 'px';
+				}else{
+					
+					this.element.style.backgroundPosition =0 + 'px '+ -parseInt(this.frameWidth)*parseInt(this.currentFrame) + 'px';
+				}
 		}
 		
 		

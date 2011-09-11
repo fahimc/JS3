@@ -5,8 +5,10 @@
 
 // imports
 IMPORT('js/com/events/Events');
-	IMPORT('js/com/events/EventDispatcher');	
+		
+	IMPORT('js/com/events/EventDispatcher');
 	IMPORT("js/com/component/display/DisplayObject");
+	IMPORT('js/com/utils/Timer');
 	IMPORT("js/com/component/display/DisplayImage");
 	IMPORT("js/com/component/display/Label");
 	IMPORT("js/com/component/display/Stage");
@@ -14,9 +16,43 @@ IMPORT('js/com/events/Events');
 	IMPORT("js/com/component/display/Sprite");
 	IMPORT("js/com/utils/FlashVars");
 //global variable
-
-
-
+var enterFrameCallBacks=new Array();
+var enterFrameTimer;
+window.stageChildren=[];
+function onEnterFrame(callback)
+{
+	enterFrameCallBacks.push(callback);
+		if(!enterFrameTimer)
+		{
+			enterFrameTimer =new Timer(stage.frameRate);
+			enterFrameTimer.addEventListener(TimerEvent.TIMER.name,onEnterFrameTimer);
+			enterFrameTimer.start();
+		}
+}
+function onEnterFrameTimer()
+{
+	for(var a=0;a<enterFrameCallBacks.length;a++)
+	{
+		enterFrameCallBacks[a]();
+	}
+}
+function removeEnterFrame(callback)
+{
+	
+	for(var a=0;a<enterFrameCallBacks.length;a++)
+	{
+		if(enterFrameCallBacks[a]==callback)
+		{
+			enterFrameCallBacks.splice( a, 1 );
+		}
+	}
+	if(enterFrameCallBacks.length==0)
+	{
+		enterFrameTimer.stop();
+		enterFrameTimer.removeEventListener(TimerEvent.TIMER.name,onEnterFrameTimer);
+		enterFrameTimer=null;
+	}
+}
 	/// stage
 //! An addChild.
 /*! More detailed enum description. */
@@ -25,6 +61,7 @@ IMPORT('js/com/events/Events');
 // addchild
 function addChild(child)
 {
+	stageChildren.push(child);
 	if(child.element)
 	{
 	    document.body.appendChild(child.element);	
@@ -35,6 +72,14 @@ function addChild(child)
 
 function removeChild (child) 
 {
+	for(var a=0;a<stageChildren.length;a++)
+	{
+		if(stageChildren[a] ==child)
+		{
+			stageChildren.splice(a,1);
+			a=stageChildren.length+1;
+		}
+	}
 	if(child.element)
 	{
 		document.body.removeChild(child.element);
@@ -42,7 +87,20 @@ function removeChild (child)
 		document.body.removeChild(child);
 	}
 }
-
+function contains(child) 
+{
+	if(this.stageChildren)
+	{
+		for(var a=0;a<stageChildren.length;a++)
+		{
+			if(stageChildren[a] ==child)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
 /// trace class
 function trace ()
 {
@@ -99,7 +157,7 @@ function findPosX(obj)
         while(1) 
         {
 			var left = obj.style.left.split("px").join("");
-			trace(left,curleft,obj.offsetParent);
+			
           curleft = curleft+left;
           if(!obj.offsetParent)
             break;

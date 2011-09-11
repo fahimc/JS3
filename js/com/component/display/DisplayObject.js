@@ -13,11 +13,15 @@ function DisplayObject() {this.element =document.createElement('div');}
 	
 	// public properties:
 	public.element =document.createElement('div');
+
 	public.element.style.position = "absolute";
+	public.scrollbar=null;
+	public.scrollhandle=null;
 	public.deg2radians = Math.PI * 2 / 360;
 	public.elementRotation=0;
 	public.childrenContainer;
-
+	public.dragging=false;
+	public.isScrollable=false;
 	// private properties
 	
 	
@@ -36,28 +40,44 @@ function DisplayObject() {this.element =document.createElement('div');}
 					this.element.appendChild(child);
 				}
 			}
-			public.dragging=false;
+			
 			public.addChildAt = function(child, index) 
 			{
 				
 			}
 			public.removeChild = function(child) 
 			{
-				for(var a=0;a<this.childrenContainer.length;a++)
+				if(this.childrenContainer)
 				{
-					if(this.childrenContainer[a] ==child)
+					for(var a=0;a<this.childrenContainer.length;a++)
 					{
-						this.childrenContainer.splice(a,1);
-						a=this.childrenContainer.length+1;
+						if(this.childrenContainer[a] ==child)
+						{
+							this.childrenContainer.splice(a,1);
+							a=this.childrenContainer.length+1;
+						}
 					}
 				}
-				
 				if(child.element)
 				{
 					this.element.removeChild(child.element);
 				}else{
 					this.element.removeChild(child);
 				}
+			}
+			public.contains = function(child) 
+			{
+				if(this.childrenContainer)
+				{
+					for(var a=0;a<this.childrenContainer.length;a++)
+					{
+						if(this.childrenContainer[a] ==child)
+						{
+							return true;
+						}
+					}
+				}
+				return false;
 			}
 			public.removeChildAt = function(index) 
 			{
@@ -101,6 +121,9 @@ function DisplayObject() {this.element =document.createElement('div');}
 			{
 				
 				 this.element.style.height = value+"px";
+				
+					this.scrollable(); 
+				
 			}
 			public.getHeight =function()
 			{
@@ -274,6 +297,15 @@ function DisplayObject() {this.element =document.createElement('div');}
 				return true;
 				
 			}
+			public.hitTestPoint =function(xx,yy)
+			{
+				//var hitTest =false;
+				if(parseInt(this.getX())==parseInt(xx) && parseInt(this.getY())==parseInt(yy))
+				{
+					return true;
+				}
+					return false;		
+			}
 			public.hideMouse = function()
 			{
 			  this.element.style.cursor = "none";
@@ -329,8 +361,178 @@ function DisplayObject() {this.element =document.createElement('div');}
 				if(!isStyle)return null;
 				return isStyle.split("px").join("");				
 			}
-			
-			
+			public.addStyleName=function(value)
+			{
+				 this.element.setAttribute("class",value);
+			}
+			public.scrollable=function(value)
+			{
+				
+				//trace(this.getHeight(),this.element.scrollHeight)
+				if(this.element.scrollHeight>this.getHeight())
+				{
+
+					this.element.style.overflow="hidden"; 
+					
+					if(!this.scrollbar)
+					{
+						
+						this.scrollbar = new DisplayObject();
+						this.scrollbar.addStyleName('scrollbar');
+						
+					}
+					
+					if(!this.scrollhandle)
+					{
+						
+						this.scrollhandle = new DisplayObject();
+						this.scrollhandle.addStyleName('handle');	
+						
+					}
+					
+					this.setScrollbar();
+					
+					
+					
+				}else if(this.scrollbar){
+					
+					this.setScrollbar(false);
+					//this.scrollhandle.setHeight(this.element.scrollHeight-this.getHeight());
+				}
+				
+			}
+			public.setScrollbar=function(value)
+				{
+					if(value!=false)
+					{
+					this.scrollbar.x(parseInt(this.getX())+parseInt(this.getWidth()));
+					this.scrollbar.y(parseInt(this.getY()));
+					this.scrollbar.setHeight(this.getHeight());
+					var ratio = this.getHeight()/this.element.scrollHeight;
+					//trace(this.scrollbar.getHeight() * ratio);
+					this.scrollhandle.x(0);
+						this.scrollhandle.y(0);
+						this.scrollhandle.buttonMode(true);
+					this.scrollhandle.setHeight(this.scrollbar.getHeight() * ratio);	
+					var sb = this.scrollbar;
+					var sh = this.scrollhandle;
+					var mouseX;
+					var mouseY;
+					var graby;
+					var eley;
+					var oriy;
+					var startX;
+					var startY;
+					var obj = this;
+					var isScrolling=false;
+					if(!contains(this.scrollbar))
+					{
+					this.scrollhandle.addEventListener(MouseEvent.MOUSE_DOWN,onScrollMouseDown);
+					stage.addEventListener(MouseEvent.MOUSE_MOVE,mouseUpDate);
+					// document.onmousemove =mosueUpDate;
+					  this.addEventListener(MouseEvent.MOUSE_WHEEL, onWheelScrollMouse);  
+					  this.addEventListener(TouchEvent.TOUCH_START,onTouch);
+		    		   this.addEventListener(TouchEvent.TOUCH_MOVE,onTouchMove);
+					   this.scrollbar.addChild(this.scrollhandle);
+					   addChild(this.scrollbar);
+					}
+					 mouseUpDate();
+					 
+					}else{
+						document.onmousedown = null;  
+						document.onmousemove =null;
+						document.onmouseup=null;
+						stage.removeEventListener(MouseEvent.MOUSE_MOVE,mouseUpDate);
+						this.scrollhandle.removeEventListener(MouseEvent.MOUSE_DOWN,onScrollMouseDown);
+						this.removeEventListener(MouseEvent.MOUSE_WHEEL, onWheelScrollMouse);  
+						
+							this.scrollbar.removeChild(this.scrollhandle);
+							removeChild(this.scrollbar);
+						
+						this.isScrollable=false;
+						this.scrollbar=null;
+						this.scrollhandle=null;
+					
+					}
+					function onTouch(event)
+					{
+						 if( event.touches)
+						{
+							
+							var touch = event.touches[0];
+							startX =touch.pageX;
+							graby =touch.pageY-parseInt(sh.getY());
+							eley = oriy = sh.element.offsetTop;
+						}
+					}
+					function onTouchMove(e)
+					{
+						eley = oriy + (mouseY-graby);
+						if(eley >= 0 && eley <= parseInt(sb.getHeight())-parseInt(sh.getHeight()))
+						 {
+						 sh.y(eley);
+						 ratio = sh.getY()/sb.getHeight();
+						 obj.element.scrollTop=ratio * obj.element.scrollHeight;
+						 }
+						var touch = event.touches[0];
+						mouseY = parseInt(touch.pageY)-parseInt(sh.getY());
+					}
+					function onWheelScrollMouse(e)
+					{
+						
+						e = e ? e : window.event;
+  						var wheelData = e.detail ? e.detail : e.wheelDelta;
+						 obj.element.scrollTop-=wheelData;
+						 ratio =  obj.element.scrollTop/obj.element.scrollHeight;
+						 
+							sh.y(sb.getHeight() * ratio);
+					}
+					function mouseUpDate(e)
+					{
+						mouseY = parseInt(stage.mouseY(e))-parseInt(sh.getY());
+					}
+					function onScrollMouseDown(e)
+					{
+						
+						document.onmousedown = falsefunc;  
+						sh.removeEventListener(MouseEvent.MOUSE_DOWN,onScrollMouseDown);
+						stage.removeEventListener(MouseEvent.MOUSE_MOVE,mouseUpDate);
+						stage.addEventListener(MouseEvent.MOUSE_MOVE,onHandleMove);
+						 //document.onmousemove =onHandleMove;
+						 document.onmouseup=onScrollMouseUp;
+						
+						graby = mouseY;
+						sh.element.zIndex = 0;
+						eley = oriy = sh.element.offsetTop;
+						 return false;
+						//trace("drag",sh);
+						//sh.startDrag(20,sb.getHeight(),0,0);
+					}
+					function onHandleMove(e)
+					{
+						
+						 eley = oriy + (mouseY-graby);
+						 if(eley >= 0 && eley <= parseInt(sb.getHeight())-parseInt(sh.getHeight()))
+						 {
+						 sh.y(eley);
+						 ratio = sh.getY()/sb.getHeight();
+						 obj.element.scrollTop=ratio * obj.element.scrollHeight;
+						 }
+						 mouseUpDate(e);
+  						 return false;
+					}
+					function onScrollMouseUp(e)
+					{
+						sh.element.zIndex = 0;
+						stage.removeEventListener(MouseEvent.MOUSE_MOVE,onHandleMove);
+						stage.addEventListener(MouseEvent.MOUSE_MOVE,mouseUpDate);
+						//document.onmousemove = mosueUpDate;
+  						document.onmouseup = null;
+  						document.onmousedown = null;  
+						sh.addEventListener(MouseEvent.MOUSE_DOWN,onScrollMouseDown);
+					}
+					function falsefunc() { return false; } // used to block cascading events
+				}
 			
 window.DisplayObject = DisplayObject;
 }(window));

@@ -68,6 +68,33 @@ function Stage()
 					document.body.removeChild(child);
 				}
 			}
+	public.mouseY = function(e)
+	{
+		
+		if (!e) e = window.event; // works on IE, but not NS (we rely on NS passing us the event)
+
+		  if (e)
+		  { 
+			if (e.pageX || e.pageY)
+			{ // this doesn't work on IE6!! (works on FF,Moz,Opera7)
+			 // mousex = e.pageX;
+			 
+			  return e.pageY;
+			 // algor = '[e.pageX]';
+			 // if (e.clientX || e.clientY) algor += ' [e.clientX] '
+			}
+			else if (e.clientX || e.clientY)
+			{ // works on IE6,FF,Moz,Opera7
+			  //mousex = e.clientX + document.body.scrollLeft;
+			 
+			  return e.clientY;
+			 // algor = '[e.clientX]';
+			 // if (e.pageX || e.pageY) algor += ' [e.pageX] '
+			}  
+		  }
+	}
+	
+	
 // debugger
 function JSDebugger(){}
 	extend(JSDebugger,DisplayObject);

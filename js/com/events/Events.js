@@ -28,14 +28,15 @@ window.MouseEvent =
 		MOUSE_OVER:{name:"mouseover",target:"parent",on:true},
 		MOUSE_MOVE:{name:"mousemove",target:document,on:true},
 		MOUSE_DOWN:{name:"mousedown",target:"parent",on:true},
-		MOUSE_UP:{name:"mouseup",target:"parent",on:true}
+		MOUSE_UP:{name:"mouseup",target:"parent",on:true},
+		MOUSE_WHEEL:{name:"mousewheel",target:"parent",on:true}
 	};
 // touch events
 window.TouchEvent = 
 	{
-		TOUCH_END:{name:"touchend",target:document,on:false},
-		TOUCH_MOVE:{name:"touchmove",target:document,on:false},
-		TOUCH_START:{name:"touchstart",target:document,on:false}
+		TOUCH_END:{name:"touchend",target:"parent",on:false},
+		TOUCH_MOVE:{name:"touchmove",target:"parent",on:false},
+		TOUCH_START:{name:"touchstart",target:"parent",on:false}
 	};
 
 // standard events
@@ -43,7 +44,8 @@ window.Event =
 {
 	RESIZE:{name:"resize",target:window,on:true},
 	ADDED_TO_STAGE:{name:"load",target:window,on:true},
-	ON_COMPLETE:{name:"ON_COMPLETE",target:window}
+	ON_COMPLETE:{name:"ON_COMPLETE",target:window},
+	ENTER_FRAME:{name:"ENTER_FRAME",target:window}
 };
 
 

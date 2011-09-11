@@ -3,37 +3,68 @@
 function EventDispatcher(){}
 var public = EventDispatcher.prototype;
 public.events=[];
+
 public.addEventListener=function(event,callback){
-	var check = this.checkEvent(event);
-	if(!check)
+	
+	if(event.name == Event.ENTER_FRAME.name )
 	{
-		this.events[event] = this.events[event] || [];
-		if ( this.events[event] ) {
-			this.events[event].push(callback);
-		}
+		onEnterFrame(callback);
 	}else{
-		this.addStandardEventListener(this,event,callback);
+		var check = this.checkEvent(event);
+		if(!check)
+		{
+			this.events[event] = this.events[event] || [];
+			if ( this.events[event] ) {
+				this.events[event].push(callback);
+			}
+		}else{
+			this.addStandardEventListener(this,event,callback);
+		}
+		
+		check =null;
 	}
-	check =null;
 }
 
 public.removeEventListener=function(event,callback){
-	var check = this.checkEvent(event);
-	if(!check)
+	if(event.name == Event.ENTER_FRAME.name )
 	{
-	if ( this.events[event] ) {
-		var listeners = this.events[event];
-		for ( var i = listeners.length-1; i>=0; --i ){
-			if ( listeners[i] === callback ) {
-				listeners.splice( i, 1 );
-				return true;
+		removeEnterFrame(callback);
+	}else{
+		var check = this.checkEvent(event);
+		if(!check)
+		{
+		if ( this.events[event] ) {
+			var listeners = this.events[event];
+			for ( var i = listeners.length-1; i>=0; --i ){
+				if ( listeners[i] === callback ) {
+					listeners.splice( i, 1 );
+					return true;
+				}
 			}
 		}
+		return false;
+		}else{
+			this.removeStandardEventListener(this,event,callback);
+		}
 	}
-	return false;
-	}else{
-		this.removeStandardEventListener(this,event,callback);
-	}
+}
+public.hasEventListener=function(event,callback){
+	
+		var check = this.checkEvent(event);
+		
+			var listeners = this.events[event];
+			if(listeners)
+			{
+			for ( var i = listeners.length-1; i>=0; --i ){
+				if ( listeners[i] === callback ) {
+					
+					return true;
+				}
+			}
+			}
+		return false;
+		
+		
 }
 public.checkEvent = function (event)
 {

@@ -3,9 +3,12 @@ META("viewport","width=device-width, user-scalable=no");
 //window.onload=main;
 (function(window) {
 //global variables
+var header;
+
 var urlLoader;
 var classCollection=new Array();
 var currentClass=0;
+var aryClassElements = new Array();
 //add Stage init
 stage.addEventListener(Event.ADDED_TO_STAGE,init);
 function init()
@@ -13,13 +16,64 @@ function init()
 	
 	stage.removeEventListener(Event.ADDED_TO_STAGE,init);
 	stage.addEventListener(Event.RESIZE,resize);
+	
+	header = new UIElement();
+	header.styleName = "mainheader";
+	header.build();
+	header.setStyle();
+	header.arrange();
+	addChild(header);
+	header.addChild(document.getElementById("headertitle"));
+	header.addChild(document.getElementById("headerlogo"));
+	
+	divder = new UIElement();
+	divder.name = "divider";
+	divder.build();
+	divder.setStyle();
+	divder.arrange();
+	
+	divder.x(150);
+	divder.setHeight(stage.stageHeight() - header.getHeight()-30);
+	divder.setWidth(2);
+	divder.y(parseInt(header.getHeight())+10);
+	//addChild(divder);
+
+	
+	 
+	 classesFrame = new UIElement();
+	classesFrame.name = "classes";
+
+	classesFrame.build();
+	classesFrame.setStyle();
+	classesFrame.arrange();
+	classesFrame.setHeight(stage.stageHeight() - header.getHeight()-30);
+	classesFrame.setWidth(148);
+	classesFrame.y(parseInt(header.getHeight())+10);
+	addChild(classesFrame);
+	
+	
+	
+	classHolder = new UIElement();
+	classHolder.name = "classContent";
+	classHolder.build();
+	classHolder.setStyle();
+	classHolder.arrange();
+	classHolder.setHeight(stage.stageHeight() - header.getHeight()-30);
+	classHolder.setWidth(stage.stageWidth() - 150-80);
+	classHolder.y(parseInt(header.getHeight())+10);
+	classHolder.x(150);
+	
+	addChild(classHolder);
+	classHolder.scrollable();
+	 classesFrame.scrollable();
 	urlLoader = new URLLoader();
 	urlLoader.addEventListener(Event.ON_COMPLETE.name,onXMLLoad);
 	urlLoader.load('docs.xml');
-	
 }
 function onXMLLoad()
 {
+	
+	
 	var classes = urlLoader.xml.getElementsByTagName("class");
 	for(var b=0;b <classes.length;b++)
 	{
@@ -226,6 +280,7 @@ function showCurrentClass()
 		document.getElementById("classContent").appendChild(etable);
 	}
 	
+	resize();
 }
 window.onClassClick=function(id)
 {
@@ -234,8 +289,26 @@ window.onClassClick=function(id)
 }
 function resize()
 {
+	document.getElementById("classes").style.height = stage.stageHeight() - header.getHeight()-30+"px";
+	aryClassElements.length = 0;
+    getElementsByClassName( 'eventsTable', document.body );
+    for ( var i = 0; i < aryClassElements.length; i++ ) {
+        aryClassElements[i].style.width=(stage.stageWidth() - 150-110)+"px";
+    }
+	//document.getElementById("eventsTable").style.width=(stage.stageWidth() - 150-100)+"px";
+	divder.setHeight(stage.stageHeight() - header.getHeight()-30);
+	classHolder.setHeight(stage.stageHeight() - header.getHeight()-30);
+	classHolder.setWidth(stage.stageWidth() - 150-80);
 	
+	classesFrame.setHeight(stage.stageHeight() - header.getHeight()-30);
 	
+}
+function getElementsByClassName( strClassName, obj ) {
+    if ( obj.className == strClassName ) {
+        aryClassElements[aryClassElements.length] = obj;
+    }
+    for ( var i = 0; i < obj.childNodes.length; i++ )
+        getElementsByClassName( strClassName, obj.childNodes[i] );
 }
 function ClassItem()
 {
