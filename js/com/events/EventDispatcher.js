@@ -13,10 +13,11 @@ public.addEventListener=function(event,callback){
 		var check = this.checkEvent(event);
 		if(!check)
 		{
-			this.events[event] = this.events[event] || [];
-			if ( this.events[event] ) {
-				this.events[event].push(callback);
-			}
+			addJS3Event(event,callback);
+			/*js3events[event] = js3events[event] || [];
+			if ( js3events[event] ) {
+				js3events[event].push(callback);
+			}*/
 		}else{
 			this.addStandardEventListener(this,event,callback);
 		}
@@ -33,15 +34,16 @@ public.removeEventListener=function(event,callback){
 		var check = this.checkEvent(event);
 		if(!check)
 		{
-		if ( this.events[event] ) {
-			var listeners = this.events[event];
+			removeJS3Event(event,callback)
+		/*if ( js3events[event] ) {
+			var listeners = js3events[event];
 			for ( var i = listeners.length-1; i>=0; --i ){
 				if ( listeners[i] === callback ) {
 					listeners.splice( i, 1 );
 					return true;
 				}
 			}
-		}
+		}*/
 		return false;
 		}else{
 			this.removeStandardEventListener(this,event,callback);
@@ -52,7 +54,7 @@ public.hasEventListener=function(event,callback){
 	
 		var check = this.checkEvent(event);
 		
-			var listeners = this.events[event];
+			var listeners = js3events[event];
 			if(listeners)
 			{
 			for ( var i = listeners.length-1; i>=0; --i ){
@@ -168,13 +170,7 @@ public.removeStandardEventListener = function(obj,eventName,functionName)
 }
 public.dispatch=function(event){
 	//trace(event);
-	if ( this.events[event] ) {
-		var listeners = this.events[event], len = listeners.length;
-		while ( len-- ) {
-			
-			listeners[len](this);	//callback with self
-		}		
-	}
+	JS3Dispatch(this,event);
 }
 
  window.EventDispatcher = EventDispatcher;

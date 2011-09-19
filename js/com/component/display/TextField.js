@@ -1,7 +1,10 @@
 // JavaScript Document
 (function(window) {
+	
 function TextField()
 {
+	extend(TextField,UIElement);
+	this.init();
 	this.setWidth =function(value)
 	{
 		
@@ -16,7 +19,7 @@ function TextField()
 	}
 }
 
-	extend(TextField,UIElement);
+	
 	// constructor:
 	var public = TextField.prototype;
 
@@ -36,15 +39,15 @@ function TextField()
 			this.backgroundImage.setAttribute('width', '100%');
 			this.backgroundImage.setAttribute("src",this.backgroundUrl);
 			this.backgroundImage.style.position = "absolute";
-			this.element.appendChild(this.backgroundImage);
+			this.childHolder.appendChild(this.backgroundImage);
 		}
 		
 	  this.textfield = document.createElement('input');
 	  this.textfield.setAttribute('type','text');
-	  
+	   
 	  this.textfield.style.background="transparent";
 	   this.textfield.style.position = "absolute";
-	  this.element.appendChild(this.textfield);
+	  this.addChild(this.textfield);
 	 // trace("build");
 	}
 	public.setStyle = function() 
@@ -54,13 +57,13 @@ function TextField()
 		 this.textfield.setAttribute("class",this.styleName);
 	     this.textfield.style.width =(this.getWidth()-this.right)+"px";
 		 this.setDefaultStyle();
-		 per=null;
+		
 		 
 	}
 	
 	public.text =function(value)
 	{
-		 this.element.value=value;
+		 this.textfield.value=value;
 	}
 	public.getText =function()
 	{

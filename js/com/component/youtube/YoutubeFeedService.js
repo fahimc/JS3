@@ -2,6 +2,7 @@
 (function(window) {
 extend(YoutubeFeedService,URLLoader);
 newEvent("FEED_COMPLETE");
+
 function YoutubeFeedService()
 {
 	//public functions
@@ -16,6 +17,7 @@ function YoutubeFeedService()
 		//urlLoader.load(prefix+value+suffix);
 		
 		urlLoader.load(FlashVars.getHostURL()+"php/getData.php?data="+escape(value));
+		//urlLoader.load("http://jiggyape.com/m/php/getData.php?data="+escape(value));
 	}
 	function onComplete()
 	{

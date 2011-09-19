@@ -1,5 +1,7 @@
 // JavaScript Document
 META("viewport","width=device-width, user-scalable=no");
+IMPORT("js/com/utils/URLLoader");
+
 //window.onload=main;
 (function(window) {
 //global variables
@@ -41,7 +43,7 @@ function init()
 	
 	var sb = new Sprite();
 	sb.beginFill("#abaaaa");
-	sb.drawRoundRect(0,0,5,5,5);
+	sb.drawRoundRect(0,0,10,10,5);
 	 sb.endFill();
 	 
 	 var sh = new Sprite();
@@ -86,8 +88,8 @@ function init()
 	classHolder.x(150);
 	
 	addChild(classHolder);
-	classHolder.scrollable();
-	 classesFrame.scrollable();
+	//classHolder.scrollable();
+	// classesFrame.scrollable();
 	urlLoader = new URLLoader();
 	urlLoader.addEventListener(Event.ON_COMPLETE.name,onXMLLoad);
 	urlLoader.load('docs.xml');
@@ -182,10 +184,9 @@ function onXMLLoad()
 function showCurrentClass()
 {
 	//document.getElementById("classContent").innerHTML="";
-
-	for(var g=0; g< classHolder.numChildren();g++)
+	while(classHolder.numChildren()>0)
 	{
-		classHolder.removeChildAt(g);
+		classHolder.removeChildAt(classHolder.numChildren()-1);
 	}
 	
 	if(classCollection[currentClass] && classCollection[currentClass].props.length>0)

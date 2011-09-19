@@ -1,8 +1,25 @@
 // JavaScript Document
 (function(window) {
-function YoutubePlayer(){}
+		  
+function YoutubePlayer(){
+	newEvent("YOUTUBE_READY");
+	newEvent("YOUTUBE_VIDEO_ENDED");
+	this.init();
+	this.visible=function(value)
+	{
+		if(value==true)
+				{
+					this.element.style.visibility="visible";
+					if(document.getElementById("YoutubePlayerComponent"))document.getElementById("YoutubePlayerComponent").style.visibility="visible";
+				}else if(value==false){
+					this.element.style.visibility="hidden";
+					if(document.getElementById("YoutubePlayerComponent"))document.getElementById("YoutubePlayerComponent").style.visibility="hidden";
+				}
+	}
+	}
 
 	extend(YoutubePlayer,UIElement);
+	
 	// constructor:
 	var public = YoutubePlayer.prototype;
 	// public properties:
@@ -49,11 +66,11 @@ function YoutubePlayer(){}
 		this.element.style.height =value+"px"; 
 		
 	}
-	public.init = function()
+	public.initYoutube = function()
 	{
 		//create player div
 	  
-		
+		window.autoPlay=true;
 		// get youtube player
 		var tag = document.createElement('script');
    	 	tag.src = "http://www.youtube.com/player_api";
@@ -74,12 +91,14 @@ function YoutubePlayer(){}
 
 	public.playVideoById =function(id)
 	{	
+	
+		window.autoPlay=true;
 		Yplayer.loadVideoById(id);
 	}
-
+	
 	window.onYouTubePlayerAPIReady = function() {
 		
-		var sid =  'JW5meKfy3fY';
+		var sid =  '';
 		var ap = 0;
 		if(window.songId)sid = window.songId;
 		if(window.autoPlay)ap =1;
@@ -104,14 +123,14 @@ function YoutubePlayer(){}
 	}
 	window.onPlayerReady =function(evt)
 	 {
-		//var yt= document.getElementById("YoutubePlayerComponent");
-      
-	  Yplayer.playVideo();
+		//var yt= doument.getElementById("YoutubePlayerComponent");
+      this.dispatch(YOUTUBE_READY);
+	  //Yplayer.playVideo();
     }
 	window.onPlayerStateChange =function(evt)
 	 {
 		 
-		 if (evt.data == 0)dispatchEvent(YouTubeVideoEnded,false);
+		 if (evt.data == 0)this.dispatch(YOUTUBE_VIDEO_ENDED);
 		//var yt= document.getElementById("YoutubePlayerComponent");
         //yt.playVideo();
     }

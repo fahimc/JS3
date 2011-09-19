@@ -23,6 +23,7 @@ function DisplayObject() {
 	public.elementRotation=0;
 	public.childrenContainer;
 	public.UIChildrenContainer;
+	public.backgroundUI;
 	public.childHolder;
 	public.dragging=false;
 	public.isScrollable=false;
@@ -164,6 +165,50 @@ function DisplayObject() {
 				
 				this.removeChild(this.childrenContainer[index]);
 			}
+			public.purge = function() 
+			{
+				var child;
+				for(var a=0;a<this.childrenContainer.length;a++)
+				{
+					child = this.childrenContainer[a];
+					if(child.element)
+					{
+						if(this.childHolder)
+						{
+							this.childHolder.removeChild(child.element);
+						}else{
+							this.element.removeChild(child.element);
+						}
+					}else{
+						if(this.childHolder)
+						{
+							this.childHolder.removeChild(child);
+						}else{
+							this.element.removeChild(child);
+						}
+					}
+					this.childrenContainer.splice(a,1);
+					a=this.childrenContainer.length+1;
+				}
+				if(this.UIChildrenContainer)
+				{
+					for(var a=0;a<this.UIChildrenContainer.length;a++)
+					{
+						child = this.UIChildrenContainer[a];
+						
+						this.UIChildrenContainer.splice(a,1);
+						a=this.UIChildrenContainer.length+1;
+						if(child.element)
+						{
+							this.element.removeChild(child.element);
+						}else{
+							this.element.removeChild(child);
+						}
+
+					}
+				
+				}
+			}
 			public.getChildAt = function(index) 
 			{
 				return this.childrenContainer[index];
@@ -192,6 +237,10 @@ function DisplayObject() {
 				{
 				 this.childHolder.style.width = value+"px";
 				}
+				if(this.backgroundUI)
+				{
+					this.backgroundUI.width =value;
+				}
 			}
 			public.getWidth =function()
 			{
@@ -209,10 +258,12 @@ function DisplayObject() {
 				 if(this.childHolder)
 				{
 				 this.childHolder.style.height = value+"px";
-				 this.scrollable(); 
+				// this.scrollable(); 
 				}
-				
-				
+				if(this.backgroundUI)
+				{
+					this.backgroundUI.height=value;
+				}
 			}
 			public.getHeight =function()
 			{
@@ -290,15 +341,25 @@ function DisplayObject() {
 				this.element.style.position = "absolute";
 				this.element.style.padding="0px";
 				this.element.style.margin="0px";
-				this.element.style.overflow="hidden"; 
+				//this.element.style.overflow="auto"; 
 				if(this.childHolder)
 				{
 					
 				this.childHolder.style.position = "absolute";
 				this.childHolder.style.padding="0px";
 				this.childHolder.style.margin="0px";	
-				this.childHolder.style.overflow="hidden"; 
+				//this.childHolder.style.overflow="auto"; 
 				}
+			}
+			public.background = function(img)
+			{
+				this.backgroundUI = img;
+				this.backgroundUI.style.position = "absolute";
+				this.backgroundUI.style.padding="0px";
+				this.backgroundUI.style.margin="0px";
+				this.backgroundUI.width =10;
+				this.backgroundUI.height=10;
+				this.element.insertBefore(this.backgroundUI,this.childHolder)
 			}
 			public.startDrag= function(w,h,xx,yy)
 			{

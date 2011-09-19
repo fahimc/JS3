@@ -87,7 +87,32 @@ function Stage()
 			{ // works on IE6,FF,Moz,Opera7
 			  //mousex = e.clientX + document.body.scrollLeft;
 			 
-			  return e.clientY;
+			  return e.clientY+ document.body.scrollTop;
+			 // algor = '[e.clientX]';
+			 // if (e.pageX || e.pageY) algor += ' [e.pageX] '
+			}  
+		  }
+	}
+	public.mouseX = function(e)
+	{
+		
+		if (!e) e = window.event; // works on IE, but not NS (we rely on NS passing us the event)
+
+		  if (e)
+		  { 
+			if (e.pageX || e.pageY)
+			{ // this doesn't work on IE6!! (works on FF,Moz,Opera7)
+			 // mousex = e.pageX;
+			 
+			  return e.pageX;
+			 // algor = '[e.pageX]';
+			 // if (e.clientX || e.clientY) algor += ' [e.clientX] '
+			}
+			else if (e.clientX || e.clientY)
+			{ // works on IE6,FF,Moz,Opera7
+			  //mousex = e.clientX + document.body.scrollLeft;
+			 
+			  return e.clientX+ document.body.scrollLeft;
 			 // algor = '[e.clientX]';
 			 // if (e.pageX || e.pageY) algor += ' [e.pageX] '
 			}  
@@ -141,7 +166,7 @@ function JSDebugger(){}
 window.console= new JSDebugger();
 window.stage = new Stage();
 
-stage.addEventListener(Event.ADDED_TO_STAGE,frameworkinit);
+
 function frameworkinit()
 {
 	document.body.style.margin = '0px';

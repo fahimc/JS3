@@ -219,7 +219,7 @@ t.init = function(obj, prop, func, begin, finish, duration, eventOnComplete){
 		if (func!=null && func!='') {
 			this.func = func;
 		}
-		
+		if(eventOnComplete)this.onMotionFinished=eventOnComplete;
 		this.setFinish(finish);	
 
 	}

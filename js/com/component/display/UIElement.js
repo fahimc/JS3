@@ -50,10 +50,7 @@ function UIElement()
 			{
 				
 			}
-			public.purge = function() 
-			{
-				
-			}
+			
 			public.setDefaultStyle = function()
 			{
 				this.element.style.position = "absolute";
@@ -67,7 +64,7 @@ function UIElement()
 				this.label.style.margin="0px";
      		    var oText = document.createTextNode(value);
                 this.label.appendChild(oText);
-                this.element.appendChild(this.label);
+                this.addChild(this.label);
 				}else{
 				 this.label.innerHTML=value;
 				}

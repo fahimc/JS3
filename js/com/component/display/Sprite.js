@@ -69,9 +69,10 @@ function Sprite(){
 		
 
 		this.element.style.behavior= 'url(js/com/utils/border-radius.htc)';
-		 this.element.style.webkitBorderRadius = rad+"px";
+		this.element.style.webkitBorderRadius = rad+"px";
 		this.element.style.MozBorderRadius = rad+"px";
 		this.element.style['-moz-border-radius']=rad+"px";
+		this.element.style.borderRadius =rad+"px";
 		this.element.style['border-radius']=rad+'px '+rad+'px '+rad+'px '+rad+'px'; 
 	}
 }

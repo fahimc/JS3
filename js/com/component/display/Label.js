@@ -1,16 +1,35 @@
 (function(window) {
-	extend(Label,DisplayObject);
+	extend(Label,UIElement);
 function Label()
 {
-
-	this.element = document.createElement('p');
+	// init
+	this.init();
+	// private variables
+	var label;
 	
+	
+	this.build=function()
+	{
+		label = document.createElement('p');
+		label.setAttribute("class",this.styleName);
+		this.addChild(label);
+		
+	}
 	this.setText=function(value)
 	{
-		this.element.innerHTML = value;
+		label.innerHTML = value;
 	}
-
-	this.setDefaultStyle();
+	this.setStyle = function() 
+	{
+		
+		 label.style.position = "absolute";
+		label.style.padding="0px";
+		label.style.margin="0px";
+		 this.setDefaultStyle();
+		
+		 
+	}
+	
 }
 		
 		

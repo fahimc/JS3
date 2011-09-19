@@ -39,15 +39,14 @@ window.TouchEvent =
 		TOUCH_START:{name:"touchstart",target:"parent",on:false}
 	};
 
-// standard events
-window.Event =
-{
-	RESIZE:{name:"resize",target:window,on:true},
-	ADDED_TO_STAGE:{name:"load",target:window,on:true},
-	ON_COMPLETE:{name:"ON_COMPLETE",target:window},
-	ENTER_FRAME:{name:"ENTER_FRAME",target:window}
-};
 
+window.Keyboard = 
+{
+	LEFT:37,
+	UP:38,
+	RIGHT:39,
+	DOWN:40
+};
 
 // event dispatcher
 /*window.dispatchEvent=function(eventName,bubbles,cancelable,target)

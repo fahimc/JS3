@@ -15,13 +15,16 @@ function Nav()
 	var searchItem = new UIElement();
 	var playlistItem = new UIElement();
 	var popularItem = new UIElement();
+	var videoItem = new UIElement();
 	var sep =  new UIElement();
 	var sep2 =  new UIElement();
+	var sep3 =  new UIElement();
 	var horizontalGap=10;
 	//events
 	newEvent("ButtonEvent_SEARCH_CLICKED");
 	newEvent("ButtonEvent_PLAYLIST_CLICKED");
 	newEvent("ButtonEvent_POPULAR_CLICKED");
+	newEvent("ButtonEvent_VIDEO_CLICKED");
 	
 	this.build =function()
    {	
@@ -63,6 +66,15 @@ function Nav()
 		playlistItem.addEventListener(MouseEvent.CLICK,this.onPlaylistButtonClick);
 		this.addChild(playlistItem);
 		
+		
+		sep2.styleName = "sep";
+		sep2.build();
+		sep2.setStyle();
+		sep2.setHeight(24);
+		sep2.setWidth(3);
+		sep2.arrange();
+		this.addChild(sep2);
+		
 		popularItem.styleName = "poppularIconButtonUp";
 		popularItem.build();
 		popularItem.setStyle();
@@ -73,13 +85,24 @@ function Nav()
 		popularItem.addEventListener(MouseEvent.CLICK,this.onPopularButtonClick);
 		this.addChild(popularItem);
 		
-		sep2.styleName = "sep";
-		sep2.build();
-		sep2.setStyle();
-		sep2.setHeight(24);
-		sep2.setWidth(3);
-		sep2.arrange();
-		this.addChild(sep2);
+		
+		sep3.styleName = "sep";
+		sep3.build();
+		sep3.setStyle();
+		sep3.setHeight(24);
+		sep3.setWidth(3);
+		sep3.arrange();
+		this.addChild(sep3);
+		
+		videoItem.styleName = "videoIconButtonUp";
+		videoItem.build();
+		videoItem.setStyle();
+		videoItem.setHeight(23);
+		videoItem.setWidth(34);
+		videoItem.arrange();
+		videoItem.buttonMode(true);
+		videoItem.addEventListener(MouseEvent.CLICK,this.onVideoButtonClick);
+		this.addChild(videoItem);
    }
 	
 	
@@ -101,6 +124,12 @@ function Nav()
 		
 		popularItem.y((bg.getHeight() * 0.5 )-(popularItem.getHeight() * 0.5));
 		popularItem.x(parseInt(sep2.getX())+parseInt(sep2.getWidth())+horizontalGap);
+		
+		sep3.y((bg.getHeight() * 0.5 )-(sep3.getHeight() * 0.5));
+		sep3.x(parseInt(popularItem.getX())+parseInt(popularItem.getWidth())+horizontalGap);
+		
+		videoItem.y((bg.getHeight() * 0.5 )-(videoItem.getHeight() * 0.5));
+		videoItem.x(parseInt(sep3.getX())+parseInt(sep3.getWidth())+horizontalGap);
 	}
 	public.getHeight=function()
 	{
@@ -118,6 +147,10 @@ function Nav()
 	public.onPopularButtonClick=function(evt)
 	{
 			obj.dispatch(ButtonEvent_PLAYLIST_CLICKED.name);
+	}
+	public.onVideoButtonClick=function(evt)
+	{
+			obj.dispatch(ButtonEvent_VIDEO_CLICKED.name);
 	}
 	
 }

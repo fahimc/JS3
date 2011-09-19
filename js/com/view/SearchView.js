@@ -36,7 +36,7 @@ function SearchView()
 		bg.setWidth(stage.stageWidth());
 		bg.setHeight(40);
 		bg.arrange();
-		this.addChild(bg);
+		obj.addChild(bg);
 		
 		searchbox.styleName="searchBoxInputBox";
 		searchbox.build();
@@ -61,7 +61,7 @@ function SearchView()
 	   searchbox.x((stage.stageWidth() * 0.5)-(searchbox.getWidth() *0.5));
 	   searchbox.y((bg.getHeight() * 0.5)-(searchbox.getHeight() *0.5));
 	    textField.x((stage.stageWidth() * 0.5)-(textField.getWidth() *0.5));
-	   textField.y((bg.getHeight() * 0.5)-(textField.getHeight() *0.5));
+	   textField.y(((bg.getHeight() * 0.5)-(textField.getHeight() *0.5)));
 	   if(list)
 	   {
 		   
@@ -78,6 +78,7 @@ function SearchView()
    }
    this.onKeyPress=function(event)
    {
+	   
 	   if(event.keyCode==13)
 	   {
 		   dispatch(SEARCHBOX_CLICKED.name);
@@ -146,7 +147,7 @@ function SearchView()
 			
 			cy  = cy+parseInt(items.getHeight())+5;
 		}
-		
+		list.x(0);
 		
    }
    this.purge=function()
@@ -208,12 +209,13 @@ window.SearchView = SearchView;
 extend(SearchList,UIElement);
 function SearchList()
 {
+	this.init();
 	var public =SearchList.prototype;
 	public.holder = new UIElement();
 	
 		this.build=function()
 		{
-			public.build();
+			//public.build();
 			this.holder.styleName="searchListHolders";
 			this.holder.build();
 			this.holder.setStyle();
@@ -258,6 +260,7 @@ window.SearchList = SearchList;
 extend(SearchListItem,UIElement);
 function SearchListItem()
 {
+	this.init();
 	var public =SearchListItem.prototype;
 	var data =null;
 	var img=null;
@@ -268,8 +271,8 @@ function SearchListItem()
 	
 		this.build=function()
 		{
-			this.element =document.createElement('div');
-			this.setDefaultStyle();
+			//this.element =document.createElement('div');
+		//	this.setDefaultStyle();
 			//sqDefault or hqDefault
 			img = new DisplayImage(data.thumbnail.sqDefault);
 			img.setWidth(60);

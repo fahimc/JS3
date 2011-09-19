@@ -2,7 +2,7 @@
 (function(window) {
 // extend
 extend(PlaylistView,DisplayObject);
-
+newEvent("PLAY_SONG_BY_ID");
 //public
 var public =PlaylistView.prototype;
 public.element =document.createElement('div');
@@ -49,8 +49,9 @@ function PlaylistView()
 		for(var a=0; a< model.getPlaylistCollection().length;a++)
 		{
 			
-			var items = new SearchListItem();
+			var items = new PlayListItem();
 			items.styleName="searchItem";
+			items.name="playlistItem-"+a;
 			items.setData (model.getPlaylistCollection()[a][0]);
 			items.setModel(model);
 			items.setId(model.getPlaylistCollection()[a][1]);
@@ -153,12 +154,13 @@ window.PlaylistView = PlaylistView;
 extend(PlayList,UIElement);
 function PlayList()
 {
+	this.init();
 	var public =PlayList.prototype;
 	public.holder = new UIElement();
 	
 		this.build=function()
 		{
-			public.build();
+			//public.build();
 			this.holder.styleName="searchListHolders";
 			this.holder.build();
 			this.holder.setStyle();
@@ -203,6 +205,7 @@ window.PlayList = PlayList;
 extend(PlayListItem,UIElement);
 function PlayListItem()
 {
+	this.init();
 	var public =PlayListItem.prototype;
 	var data =null;
 	var img=null;
@@ -213,8 +216,8 @@ function PlayListItem()
 	
 		this.build=function()
 		{
-			this.element =document.createElement('div');
-			this.setDefaultStyle();
+			//this.element =document.createElement('div');
+			//this.setDefaultStyle();
 			//sqDefault or hqDefault
 			img = new DisplayImage(data.thumbnail.sqDefault);
 			img.setWidth(60);
@@ -228,16 +231,17 @@ function PlayListItem()
 			label.y((80 * 0.5)-(label.getHeight() * 0.5));
 			label.x(80);
 			
-			/*plusButton = new DisplayImage("images/addButton.gif");
+			plusButton = new DisplayImage("images/addButton.gif");
+			plusButton.element.id = this.name;
 			plusButton.setWidth(27);
 			plusButton.setHeight(27);
 			plusButton.y((80 * 0.5)-(27 * 0.5));
 			plusButton.addEventListener(MouseEvent.CLICK,this.onButtonClick);
-	
-			plusButton.buttonMode(true);*/
+			plusButton.x(parseInt(label.getX())+parseInt(label.getWidth()));
+			plusButton.buttonMode(true);
 			this.addChild(img);
 			this.addChild(label);
-			//this.addChild(plusButton);
+			this.addChild(plusButton);
 		}
 	
 	this.setData=function(value)
@@ -252,8 +256,8 @@ function PlayListItem()
 	{
 		
 		label.setWidth(this.getWidth() -10-label.getX()-plusButton.getWidth());
-		//plusButton.x(this.getWidth()-plusButton.getWidth()-10);
-		//label.setWidth(stage.stageWidth);
+		plusButton.x(parseInt(label.getX())+parseInt(label.getWidth()));
+		//label.setWidth(this.getWidth() -10-label.getX());
 	}
 	this.setId=function(value)
 	{
@@ -269,7 +273,9 @@ function PlayListItem()
 	}
 	this.onButtonClick=function(evt)
 	{
-		model.addToPlaylist(id);
+
+		model.playSongId(evt.target.id);
+		public.dispatch(PLAY_SONG_BY_ID);
 	}
 }
 window.PlayListItem = PlayListItem;
